@@ -16,7 +16,7 @@ const transactions = require('../models/transactionModel')
 const {
   tp
 } = require('../config/otpGenerator');
-
+require('dotenv').config({path:'config.env'});
 
 
 const isBlocked = async (req, res, next) => {
@@ -178,8 +178,8 @@ const transporter = nodemailer.createTransport({
   secure: false,
   requireTLS: true,
   auth: {
-    user: 'dheerajpradi@gmail.com',
-    pass: 'liarigfuqarmhncq'
+    user: process.env.NODEMAILER_USER,
+    pass: process.env.NODEMAILER_PASS
   }
 
 
