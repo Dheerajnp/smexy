@@ -66,24 +66,26 @@ async function salesReport(date) {
 }
 
 let dashboard = async (req, res) => {
-  if (req.session.admin) {
-    req.session.admn = true;
+ try{
+  req.session.admn = true;
 
-    let orders = await orderModel.find().sort({ createdAt: -1 }).limit(10).populate('user', 'fullname')
+  let orders = await orderModel.find().sort({ createdAt: -1 }).limit(10).populate('user', 'fullname')
 
-    let daily = await salesReport(1)
-    let weekly = await salesReport(7);
-    let monthly = await salesReport(30);
-    let yearly = await salesReport(365)
+  let daily = await salesReport(1)
+  let weekly = await salesReport(7);
+  let monthly = await salesReport(30);
+  let yearly = await salesReport(365)
 
-    console.log("D:",daily,"W:",weekly,"M:",monthly,"Y:",yearly);
-    let allProductsCount = await Product.countDocuments();
-    let allcategoriesCount = await categoryDb.countDocuments();
+  console.log("D:",daily,"W:",weekly,"M:",monthly,"Y:",yearly);
+  let allProductsCount = await Product.countDocuments();
+  let allcategoriesCount = await categoryDb.countDocuments();
 
-    res.render("dashboard",{daily,weekly,monthly,yearly,orders,allProductsCount,allcategoriesCount});
-  } else {
-    res.redirect("/admin/signin");
-  }
+  res.render("dashboard",{daily,weekly,monthly,yearly,orders,allProductsCount,allcategoriesCount});
+
+ }catch(error){
+  res.redirect('/')
+ }
+    
 };
 
 

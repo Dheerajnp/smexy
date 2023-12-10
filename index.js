@@ -45,7 +45,7 @@ app.use('/home/cart',cartRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    next(createError(404));
+    res.render('page-404')
   });
 
 // error handler
