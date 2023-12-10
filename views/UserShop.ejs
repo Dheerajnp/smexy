@@ -1,0 +1,418 @@
+
+
+<%- include('userSidePartials/UserHeader') %>
+
+
+<%- include('userSidePartials/UserMobileHeader') %>
+<style>
+    .selected-category {
+    font-weight:bolder;
+    text-decoration: underline;
+    text-decoration-color: #088178;
+    text-decoration-thickness: 2px; /* Change this to your desired highlight color */
+}
+/* Heart icon default color (black) */
+.wishlist-button .fa-heart  {
+  color: #000 !important;
+}
+
+/* Heart icon color when in the wishlist (red) */
+.wishlist-button.added .fa-heart {
+  color:red !important;
+}
+/* The snackbar - position it at the bottom and in the middle of the screen */
+#snackbar {
+  visibility: hidden; /* Hidden by default. Visible on click */
+  min-width: 250px; /* Set a default minimum width */
+  margin-left: -125px; /* Divide value of min-width by 2 */
+  background-color: #333; /* Black background color */
+  color: #000000; /* White text color */
+  text-align: center; /* Centered text */
+  border-radius: 5px; /* Rounded borders */
+  padding: 16px; /* Padding */
+  position: fixed; /* Sit on top of the screen */
+  z-index: 100; /* Add a z-index if needed */
+  left: 50%; /* Center the snackbar */
+  bottom: 30px; /* 30px from the bottom */
+}
+
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+#snackbar.showadd {
+  visibility: visible; /* Show the snackbar */
+  /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+  However, delay the fade out process for 2.5 seconds */
+  background-color: rgba(150, 255, 150, 0.523);
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+#snackbar.showremove {
+  visibility: visible; /* Show the snackbar */
+  /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+  However, delay the fade out process for 2.5 seconds */
+  background-color: rgba(255, 0, 0, 0.509);
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+</style>
+
+<div id="snackbar"></div>
+<main class="main">
+    <div class="page-header breadcrumb-wrap">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="api/home" rel="nofollow">Home</a>
+                <span></span> Shop
+            </div>
+        </div>
+    </div>
+
+
+    <section class="mt-50 mb-50">
+        <div class="container">
+            <div class="row flex-row-reverse">
+                 <div class="col-lg-9"> <!--changed col-9 -->
+
+                    
+                   
+                     <div class="shop-product-fillter">
+                        <div class="totall-product">
+                            <p> We found <strong class="text-brand"><%= countProducts  %></strong> items for you!</p>
+                        </div>
+                        <div class="sort-by-product-area">
+                            <div class="sort-by-cover">
+                                <div class="sort-by-product-wrap">
+                                    <div class="sort-by">
+                                        <span><i class="fi-rs-apps-sort"></i>Sort by:</span>
+                                    </div>
+                                    <div class="sort-by-dropdown-wrap">
+                                        <span><%= sort %> <i class="fi-rs-angle-small-down"></i></span>
+                                    </div>
+                                </div>
+                                <div class="sort-by-dropdown">
+                                    <form action="/shop" id="filterForm" method="get">
+                                        <select id="sort" name="sort">
+                                            <option value="priceLowToHigh">Price: Low to High</option>
+                                            <option value="priceHighToLow">Price: High to Low</option>
+                                            <option value="releaseDate">Release Date</option>
+                                            <option value="avgRating">Rating</option>
+                                        </select>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div> 
+                    <div class="row product-grid-3">
+                        <% products?.forEach((element,index) => { %>
+                            <% if(element.isFeatured){ %>
+                        <div class="col-lg-4 col-md-4 col-12 col-sm-6">
+                            <div class="product-cart-wrap mb-30">
+                                <div class="product-img-action-wrap">
+                                    <div class="product-img product-img-zoom">
+                                        <a href="/product-detail/<%= element._id  %>">
+                                            <img class="default-img" src="/<%= element.image  %>" alt="">
+                                            <img class="hover-img" src="/<%= element.images[0]  %>" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="product-action-1">
+                                        <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal">
+<i class="fi-rs-search"></i></a>
+                                        <a aria-label="Add To Wishlist" class="action-btn hover-up wishlist-button<%= productInWishlist[element._id] ? ' added' : '' %>" onclick="addtoWishlist('<%= element._id %>',this)"><i class="fa-solid fa-heart"></i></a>
+
+                                        <a aria-label="Compare" class="action-btn hover-up" href="#"><i class="fi-rs-shuffle"></i></a>
+                                    </div>
+                                    <div class="product-badges product-badges-position product-badges-mrg">
+                                        <span class="hot">Hot</span>
+                                    </div>
+                                </div>
+                                <div class="product-content-wrap">
+                                    <div class="product-category">
+                                        <a href="#"><%= element.category.name %></a>
+                                    </div>
+                                    <h2><a href="#"><%= element.name  %></a></h2>
+                                    <div class="d-flex">
+                                        <% for (let i = 1; i <= 5; i++) { %>
+                                            <% if(i<=element.rating){ %>
+                                                <i class="fa fa-star" style="color: yellow; margin-top: 3px;"></i>
+                                                <% }else{ %>
+                                                    <i class="fa fa-star" style="color: black; border-color: black; margin-top: 3px;"></i>
+                                                    <% } } %>     <span class="ms-2"><%= element.rating %></span> 
+                                    </div>
+                                    <div class="product-price">
+                                        <% if (element.discountPercentage > 0) { %>
+                                            <span>INR <%= element.price %> </span>
+                                            <span class="old-price"><%= element.originalPrice %></span><span style="font-size: small;"><%= element.discountPercentage %>% Off</span>
+                                            <% }else{ %>
+                                                <span>INR <%= element.originalPrice  %> </span>
+                                                <% } %>
+                                    </div>
+                                    <!-- <div class="product-action-1 show">
+                                        <a aria-label="Add To Cart" class="action-btn hover-up" href="shop-cart.html"><i class="fi-rs-shopping-bag-add"></i></a>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
+                       <% }) %>
+                    </div>
+                    <!--pagination-->
+                    <div class="pagination-area mt-15 mb-sm-5 mb-lg-0">
+                        <nav aria-label="Page navigation" class="d-flex">
+                            <% const numPagesToShow = 3; %>
+                            <% const startPage = Math.max(currentPage - numPagesToShow, 1); %>
+                            <% const endPage = Math.min(currentPage + numPagesToShow, totalPages); %>
+                    
+                            <!-- Previous Page -->
+                            <li class="page-item <%= currentPage <= 1 ? 'disabled' : '' %> " >
+                                <a class="page-link" href="#" data-page="<%= currentPage - 1 %>" aria-label="Previous">
+                                    <span aria-hidden="true">««</span>
+                                </a>
+                            </li>
+                    
+                            <% for (let i = startPage; i <= endPage; i++) { %>
+                                <li class="page-item <%= i === currentPage ? 'active' : '' %>" > <a class="page-link" href="#" data-page="<%= i %>"><%= i %></a>
+                                   
+                                </li>
+                            <% } %>
+                    
+                            <!-- Next Page -->
+                            <li class="page-item <%= currentPage >= totalPages ? 'disabled' : '' %>" >
+                                <a class="page-link" href="#" data-page="<%= currentPage + 1 %>" aria-label="Next">
+                                    <span aria-hidden="true">»»</span>
+                                </a>
+                            </li>
+                        </nav>
+                    </div>
+                    
+                    
+                </div>
+                <div class="col-lg-3 primary-sidebar sticky-sidebar">
+                    <div class="widget-category mb-30">
+                        <h5 class="section-title style-1 mb-30 wow fadeIn animated">Category</h5>
+                        <ul class="categories">
+                            <% category.forEach((category) => { %>
+                                <li>
+                                    <a href="/shop?category=<%= category._id %>" class="category-link <%= selectedCategory && category._id.toString() === selectedCategory.toString() ? 'selected-category' : '' %>">
+                                        <%= category.name %>
+                                    </a>
+                                    
+                                </li>
+                            <% }) %>
+                        </ul>
+                        
+                          
+                    </div>
+
+                    <div class="sidebar-widget product-sidebar  mb-30 p-30 bg-grey border-radius-10">
+                        <div class="widget-header position-relative mb-20 pb-10">
+                            <h5 class="widget-title mb-10">New products</h5>
+                            <div class="bt-1 border-color-1"></div>
+                        </div>
+                        <% newProducts.forEach((newProduct)=>{ %>
+                        <div class="single-post clearfix">
+                            <div class="image">
+                                <img src="/<%= newProduct.image  %>" alt="#">
+                            </div>
+                            <div class="content pt-10">
+                                <h5><a href="/product-detail/<%= newProduct._id %>"><%= newProduct.name %></a></h5>
+                                <p class="price mb-0 mt-5">INR <%= newProduct.price %></p>
+                                <div class="product-rate">
+                                    <div class="d-flex">
+                                        <% for (let i = 1; i <= 5; i++) { %>
+                                            <% if(i<=newProduct.rating){ %>
+                                                <i class="fa fa-star" style="color: yellow; margin-top: 3px;"></i>
+                                                <% }else{ %>
+                                                    <i class="fa fa-star" style="color: black; border-color: black; margin-top: 3px;"></i>
+                                                    <% } } %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% }) %>
+                       
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+</main>
+<div id="preloader-active">
+    <div class="preloader d-flex align-items-center justify-content-center">
+        <div class="preloader-inner position-relative">
+            <div class="text-center">
+                <h5 class="mb-5">Now Loading</h5>
+                <div class="loader">
+                    <div class="bar bar1"></div>
+                    <div class="bar bar2"></div>
+                    <div class="bar bar3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    // Add event listeners for pagination links
+    const paginationLinks = document.querySelectorAll(".page-link");
+  
+    paginationLinks.forEach((pageLink) => {
+      pageLink.addEventListener("click", function (event) {
+        event.preventDefault();
+        const currentPage = pageLink.getAttribute("data-page");
+        updateURLWithFilter({ page: currentPage });
+      });
+    });
+  
+    const sortSelect = document.getElementById("sort");
+    const categoryLinks = document.querySelectorAll(".category-link");
+  
+    // Event listener for sorting
+    sortSelect.addEventListener("change", function () {
+      const selectedSort = sortSelect.value;
+      updateURLWithFilter({ sort: selectedSort });
+    });
+  
+    // Event listener for category filtering
+    categoryLinks.forEach((categoryLink) => {
+      categoryLink.addEventListener("click", function (event) {
+        event.preventDefault();
+        const href = categoryLink.getAttribute("href");
+
+       // Parse the category query parameter from the link's href
+       if (href) {
+        const currentURL = new URL(window.location.href);
+        const newURL = new URL(href, window.location.origin);
+
+        // Copy over the query parameters from the new URL to the current URL
+        newURL.searchParams.forEach((value, key) => {
+          currentURL.searchParams.set(key, value);
+        });
+
+        // Redirect to the updated URL
+        window.location.href = currentURL.toString();
+      }
+      });
+    });
+  });
+  
+  function updateURLWithFilter(filters) {
+    const currentURL = new URL(window.location.href);
+  
+    // Update the query parameters with the provided filters
+    for (const key in filters) {
+      if (filters[key]) {
+        currentURL.searchParams.set(key, filters[key]);
+      } else {
+        currentURL.searchParams.delete(key);
+      }
+    }
+  
+    // Redirect to the updated URL
+    window.location.href = currentURL.toString();
+  }
+  
+
+
+    // Get all category links
+    const categoryLinks = document.querySelectorAll(".category-link");
+
+    // Add a click event listener to each category link
+    categoryLinks.forEach((categoryLink) => {
+        categoryLink.addEventListener("click", function (event) {
+            // Remove the 'selected-category' class from all category links
+            categoryLinks.forEach((link) => {
+                link.classList.remove("selected-category");
+            });
+
+            // Add the 'selected-category' class to the clicked category link
+            categoryLink.classList.add("selected-category");
+        });
+    });
+
+function addtoWishlist(productId,button) {
+
+
+    fetch(`/wishlist/${productId}`, {
+            method: 'POST',
+            headers: {
+                        'Content-Type': 'application/json'
+                    }
+                    
+          })
+          .then(response => response.json())
+          .then(data => {
+           
+            if(data.status=== 401 ){
+            
+              swal.fire({
+                icon: 'info',
+                title: 'Please login to continue',
+                confirmButtonText: 'OK',
+                cancelButtonText: 'Cancel',
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  // Redirect to the login page
+                  window.location.href = '/login'; // Replace with the correct login route
+                }
+              });
+            }else{
+                const wishlistButton = button; // Reference to the button clicked
+
+if (data.message === 'Product added to wishlist successfully') {
+    // Product added to wishlist
+    wishlistButton.classList.add('added');
+    displayMessage('add');
+} else if (data.message === 'Product removed from wishlist successfully') {
+    // Product removed from wishlist
+    wishlistButton.classList.remove('added');
+    displayMessage('remove');
+}
+          }
+          })
+          .catch(error => {
+            console.error(error);
+            // Handle the error here
+          });
+      
+}
+function displayMessage(msg) {
+  // Get the snackbar DIV
+  var x = document.getElementById("snackbar");
+
+  // Add the "show" class to DIV
+ 
+    if (msg == "add"){
+        x.innerHTML = "Product added to wishlist"
+        x.className = "showadd";
+    } else {
+        x.innerHTML = "Product removed from wishlist"
+        x.className = "showremove";
+    }
+  // After 3 seconds, remove the show class from DIV
+  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+} 
+</script>
+<%- include('userSidePartials/UserFooter') %>

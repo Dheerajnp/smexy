@@ -1,0 +1,279 @@
+<%- include('userSidePartials/UserHeader') %>
+
+
+<%- include('userSidePartials/UserMobileHeader') %>
+<style>
+/* Heart icon default color (black) */
+.wishlist-button .fa-heart  {
+  color: #000 !important;
+}
+
+/* Heart icon color when in the wishlist (red) */
+.wishlist-button.added .fa-heart {
+  color:red !important;
+}
+
+</style>
+    <!-- Quick view -->
+   
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="index.html" rel="nofollow">Home</a>
+                    <span></span> Fashion
+                    <span></span>Detailed View
+                </div>
+            </div>
+        </div>
+        <section class="mt-50 mb-50">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="product-detail accordion-detail">
+                            <div class="row mb-50">
+                                <div class="col-md-6 col-sm-12 col-xs-12">
+                                    <div class="detail-gallery">
+                                        <span class="zoom-icon"><i class="fi-rs-search"></i></span>
+                                        <!-- MAIN SLIDES -->
+                                        <div class="product-image-slider">
+                                            <figure class="border-radius-10">
+                                                <img src="/<%= product.image  %>" alt="product image">
+                                            </figure>
+                                            <figure class="border-radius-10">
+                                                <img src="/<%= product.images[0]  %>" alt="product image">
+                                            </figure>
+                                            <figure class="border-radius-10">
+                                                <img src="/Userassets/imgs/shop/product-16-3.jpg" alt="product image">
+                                            </figure>
+                                            <figure class="border-radius-10">
+                                                <img src="/Userassets/imgs/shop/product-16-4.jpg" alt="product image">
+                                            </figure>
+                                            <figure class="border-radius-10">
+                                                <img src="/Userassets/imgs/shop/product-16-5.jpg" alt="product image">
+                                            </figure>
+                                            <figure class="border-radius-10">
+                                                <img src="/Userassets/imgs/shop/product-16-6.jpg" alt="product image">
+                                            </figure>
+                                            <figure class="border-radius-10">
+                                                <img src="/Userassets/imgs/shop/product-16-7.jpg" alt="product image">
+                                            </figure>
+                                        </div>
+                                        <!-- THUMBNAILS -->
+                                        <div class="slider-nav-thumbnails pl-15 pr-15">
+                                            <div><img src="/<%= product.image  %>" alt="product image"></div>
+                                            <div><img src="/<%= product.images[0]  %>"alt="product image"></div>
+                                            <div><img src="/Userassets/imgs/shop/thumbnail-5.jpg" alt="product image"></div>
+                                            <div><img src="/Userassets/imgs/shop/thumbnail-6.jpg" alt="product image"></div>
+                                            <div><img src="/Userassets/imgs/shop/thumbnail-7.jpg" alt="product image"></div>
+                                            <div><img src="/Userassets/imgs/shop/thumbnail-8.jpg" alt="product image"></div>
+                                            <div><img src="/Userassets/imgs/shop/thumbnail-9.jpg" alt="product image"></div>
+                                        </div>
+                                    </div>
+                                    <!-- End Gallery -->
+                                </div>
+                                <div class="col-md-6 col-sm-12 col-xs-12">
+                                    <div class="detail-info">
+                                        <h2 class="title-detail"><%= product.name %></h2>
+                                        <div class="product-detail-rating">
+                                            <div class="pro-details-brand">
+                                                <span> Brands: <a href="#"><%= product.brand  %></a></span>
+                                            </div>
+                                            <div class="product-rate-cover text-end">
+                                                <div class="d-inline-block">
+                                                    <div  style="width:100%">
+                                                        <% for (let i = 1; i <= 5; i++) { %>
+                                                            <% if(i<=product.rating){ %>
+                                                                <i class="fa fa-star" style="color: yellow; margin-top: 3px;"></i>
+                                                                <% }else{ %>
+                                                                    <i class="fa fa-star" style="color: black; border-color: black; margin-top: 3px;"></i>
+                                                                    <% } } %> 
+                                                    </div>
+                                                </div>
+                                                <span class="font-small ml-5 text-muted"> <%= product.rating  %></span>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix product-price-cover">
+                                            
+                                            <div class="product-price primary-color float-left">
+                                                <% if (product.discountPercentage > 0) { %>
+                                                    <ins><span class="text-brand">INR <%= product.price %></span></ins>
+                                                    <ins><span class="old-price font-md ml-15"><%= product.originalPrice %></span></ins>
+                                               <span class="save-price font-md color3 ml-15"><%= product.discountPercentage %> % OFF</span>
+                                               <% }else{ %>
+                                                <ins><span class="text-brand">INR <%= product.originalPrice %></span></ins>
+                                                <% } %>
+                                            <span class="text-danger"><%= product.countInStock <= 0 ? 'Out of Stock' : '' %></span>
+                                            </div>
+                                        </div>
+                                        <div class="bt-1 border-color-1 mt-15 mb-15"></div>
+                                        <div class="short-desc mb-30">
+                                            <p><%= product.description %>!</p>
+                                        </div>
+                                        <div class="product_sort_info font-xs mb-30">
+                                            <ul>
+                                                <li class="mb-10"><i class="fi-rs-crown mr-5"></i> 1 Year Brand Warranty</li>
+                                                <li class="mb-10"><i class="fi-rs-refresh mr-5"></i> 30 Day Return Policy</li>
+                                                <li><i class="fi-rs-credit-card mr-5"></i> Cash on Delivery available</li>
+                                            </ul>
+                                        </div>
+                                        <!-- <div class="attr-detail attr-color mb-15">
+                                            <strong class="mr-10">Color</strong>
+                                            <ul class="list-filter color-filter">
+                                                <li><a href="#" data-color="Red"><span class="product-color-red"></span></a></li>
+                                                <li><a href="#" data-color="Yellow"><span class="product-color-yellow"></span></a></li>
+                                                <li class="active"><a href="#" data-color="White"><span class="product-color-white"></span></a></li>
+                                                <li><a href="#" data-color="Orange"><span class="product-color-orange"></span></a></li>
+                                                <li><a href="#" data-color="Cyan"><span class="product-color-cyan"></span></a></li>
+                                                <li><a href="#" data-color="Green"><span class="product-color-green"></span></a></li>
+                                                <li><a href="#" data-color="Purple"><span class="product-color-purple"></span></a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="attr-detail attr-size">
+                                            <strong class="mr-10">Size</strong>
+                                            <ul class="list-filter size-filter font-small">
+                                                <li><a href="#">S</a></li>
+                                                <li class="active"><a href="#">M</a></li>
+                                                <li><a href="#">L</a></li>
+                                                <li><a href="#">XL</a></li>
+                                                <li><a href="#">XXL</a></li>
+                                            </ul>
+                                        </div> -->
+                                        <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+                                        <div class="detail-extralink">
+                                            <!-- <div class="detail-qty border radius">
+                                                <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
+                                                <span class="qty-val">1</span>
+                                                <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
+                                            </div> -->
+                                            <div class="product-extra-link2">
+                                                <button type="button" class="button button-add-to-cart" onclick="addtoCart('<%= product._id %>')" <%= product.countInStock <= 0 ? 'disabled' : '' %>
+                                                    <%= product.countInStock <= 0 ? 'data-toggle="tooltip" data-placement="bottom" title="Out of Stock"' : '' %>>
+                                                      <%= product.countInStock <= 0 ? 'Out of Stock' : 'Add to cart' %>
+                                                    </button>
+                                                    
+
+                                                    <a href="#" aria-label="Add To Wishlist" data-product-id="<%= product._id %>" class="action-btn hover-up wishlist-button<%= productInWishlist ? ' added' : '' %>">
+                                                        <i class="fa-solid fa-heart"></i>
+                                                      </a>
+                                                <!-- <a aria-label="Compare" class="action-btn hover-up" href="#"><i class="fi-rs-shuffle"></i></a> -->
+                                            </div>
+                                        </div>
+                                        <ul class="product-meta font-xs color-grey mt-50">
+                                            <li class="mb-5">SKU: <a href="#">FWM15VKT</a></li>
+                                            <li class="mb-5">Tags: <a href="#" rel="tag">Cloth</a>, <a href="#" rel="tag">MEN</a>, <a href="#" rel="tag">Dress</a></li>
+                                            <li>
+                                              Availability:
+                                              <% if (product.countInStock >= 10) { %>
+                                                <span class="in-stock text-success ml-5"><%= product.countInStock %> Items In Stock</span>
+                                              <% } else if (product.countInStock > 0) { %>
+                                                <span class="low-stock text-warning ml-5"><%= product.countInStock %> Items In Stock</span>
+                                              <% } else { %>
+                                                <span class="out-of-stock text-danger ml-5">Out of Stock</span>
+                                              <% } %>
+                                            </li> </ul>
+                                    </div>
+                                    <!-- Detail Info -->
+                                </div>
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script>
+        function addtoCart(itemId){
+            fetch('/home/cart/addToCart/'+itemId,{
+                method:'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                
+            })
+            .then((response) =>  response.json())
+            .then(data=>{Swal.fire('Success', 'Item added to Cart', 'success');
+                const toast = document.querySelector('.toast');
+      const toastBody = toast.querySelector('.toast-body');
+      const toastHeader = toast.querySelector('.toast-header');
+
+      if (data.success) {
+        // toastHeader.innerHTML = 'Success';
+        // toastBody.innerHTML = 'Item added to the cart successfully.';
+        // toast.classList.remove('bg-danger');
+        // toast.classList.add('bg-success');
+        Swal.fire('Success', 'Item added to Cart', 'success');
+      } else {
+        toastHeader.innerHTML = 'Error';
+        toastBody.innerHTML = 'Failed to add item to the cart.';
+        toast.classList.remove('bg-success');
+        toast.classList.add('bg-danger');
+      }
+
+      $(toast).toast('show'); // Use Bootstrap's toast method to show the toast
+
+            })
+            .catch((err)=>{
+                
+            })
+        }
+
+
+        document.querySelectorAll('.wishlist-button').forEach(button => {
+        button.addEventListener('click', event => {
+          event.preventDefault();
+          
+          const productId = button.getAttribute('data-product-id');
+            console.log(productId);
+          fetch(`/wishlist/${productId}`, {
+            method: 'POST',
+            headers: {
+                        'Content-Type': 'application/json'
+                    }
+                    
+          })
+          .then(response => response.json())
+          .then(data => {
+           
+            if(data.status=== 401 ){
+            
+              swal.fire({
+                icon: 'info',
+                title: 'Please login to continue',
+                confirmButtonText: 'OK',
+                cancelButtonText: 'Cancel',
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  // Redirect to the login page
+                  window.location.href = '/login'; // Replace with the correct login route
+                }
+              });
+            }else{
+            if (data.message === 'Product added to wishlist successfully') {
+              // Product added to wishlist
+             
+              button.classList.add('added');
+              Swal.fire('Success', 'Item added to wishlist', 'success');
+            } else if (data.message === 'Product removed from wishlist successfully') {
+              // Product removed from wishlist
+              button.classList.remove('added');
+              Swal.fire({
+                icon: 'error',
+                title: 'Deleted',
+                text: 'Item removed from wishlist'
+            });
+            }
+          }
+          })
+          .catch(error => {
+            console.error(error);
+            // Handle the error here
+          });
+        });
+      });
+    </script>
+    
+
+    <%- include('userSidePartials/UserFooter') %>

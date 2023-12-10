@@ -1,0 +1,159 @@
+<%- include('partialsadmin/adminheader') %>
+
+		<!-- Page wrapper start -->
+		<div class="page-wrapper">
+
+			<!-- Sidebar wrapper start -->
+      <%- include('partialsadmin/adminnav',{dashboard:false}) %>
+			<!-- Sidebar wrapper end -->
+
+			<!-- *************
+				************ Main container start *************
+			************* -->
+			<div class="main-container">
+
+				<!-- Page header starts -->
+        <%- include('partialsadmin/adminpageheader',{dashboard:false,searchFormAction:'#'}) %>
+				<!-- Page header ends -->
+                <div class="d-flex ms-4 me-4 justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h3 class="h3 text-primary">Order Management</h3>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                      
+                        
+                    </div>
+                </div>
+                
+				<!-- Content wrapper scroll start -->
+				<div class="content-wrapper-scroll">
+
+					<!-- Content wrapper start -->
+					<div class="content-wrapper">
+
+                        <div class="row">
+							<div class="col-sm-12 col-12">
+
+								<div class="card">
+									<div class="card-body">
+										<div class="table-responsive">
+											<table class="table m-0">
+												<thead>
+													<tr>
+														<th>S.No</th>
+														
+														<th>Status</th>
+														<th>Ordered BY</th>
+														<th>Purchased</th>
+														<th>Date</th>
+														<th>Price</th>
+														<th class="text-right">View</th>
+														<th class="text-right">Deleted</th>
+														
+													</tr>
+												</thead>
+												<tbody>
+                                                    <% if(orders && orders.length > 0){ %>
+                                                        <% orders.forEach((order, index) => { %>
+                                                            <tr>
+                                                                <td><%= index + 1  %></td>
+                                                                
+                                                                <%
+                                                                const statusColors = {
+                                                                    "Pending": "yellow",
+                                                                    "Processing": "grey",
+                                                                    "Shipped": "green",
+                                                                    "Delivered": "blue",
+                                                                    "Canceled": "red",
+                                                                    "Return":"pink"
+                                                                };
+                                                                %>
+                                                                <td><span class="badge shade-<%= statusColors[order.status] %>"><%= order.status %></span></td>
+
+                                                                <td><%= order.user.name %></td>
+                                                                <td>
+                                                                    <% const totalQuantity = order.items.reduce((total, item) => total + item.quantity, 0); %>
+                                                                    <%= totalQuantity %> Items
+                                                                </td>
+                                                                <td><%= order.orderDate.toLocaleString() %></td>
+                                                                <td class="text-bold">INR <%= order.billTotal %></td>
+                                                                <td>
+                                                                    <a href="/admin/order-management/orderDetailedView/<%= order._id %>">
+                                                                        <div>
+                                                                            <button class="btn btn-success btn-small">
+                                                                                <i class="fa-regular fa-eye" style="color: #ffff; height: 8px;" ></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    </a>
+                                                                </td>
+                                                                <td>
+                                                                    <button class="btn btn-danger btn-small" onclick="confirmDelete('<%= order._id %>')">Delete</button>
+                                                                </td>
+                                                                
+                                                              
+                                                            </tr>
+                                                        <% }) } else{ %>
+                                                   
+													<tr>
+														<td colspan="9" class="text-center">No orders Found</td>
+													</tr>
+                                                <% } %>
+													
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+                    </div>
+					<!-- Content wrapper end -->
+
+					<!-- App Footer start -->
+					<div class="app-footer">
+						<span>©</span>
+					</div>
+					<!-- App footer end -->
+
+				</div>
+				<!-- Content wrapper scroll end -->
+
+			</div>
+			<!-- *************
+				************ Main container end *************
+			************* -->
+
+		</div>
+
+        <script>
+            function confirmDelete(orderId) {
+                Swal.fire({
+                    title: 'Delete Order?',
+                    text: 'Are you sure you want to delete this order?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // If the user confirms, send a request to delete the order
+                        fetch(`/admin/order-management/deleteOder/${orderId}`, {
+                            method: 'DELETE'
+                        }).then((response) => response.json() ) 
+                         .then((response)=>{
+                            if (response.success) {
+                                // Order deleted successfully
+                                Swal.fire('Order Deleted', '', 'success');
+                                window.location.reload();
+                            } else {
+                                // Handle deletion failure
+                                Swal.fire('Error Deleting Order', response.message, 'error');
+                            }
+                        });
+                    }
+                });
+            }
+        </script> 
+    <%- include('partialsadmin/adminfooter') %>
+		

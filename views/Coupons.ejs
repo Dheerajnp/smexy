@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Coupon Management System - Admin</title>
+    <%- include('partialsadmin/adminheader') %>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+ 
+    <%- include('partialsadmin/adminnav',{dashboard:false}) %>
+
+<body>
+
+    <div class="container mt-4 main-div-container" style="margin-left: 290px;">
+        <h2>Coupon Management</h2>
+        <hr>
+    
+        <!-- Add Coupon Form -->
+       <!-- Add Coupon Form -->
+<!-- Add Coupon Form -->
+<div class="card mb-4">
+    <div class="card-header">
+        Add Coupon
+    </div>
+    <div class="card-body">
+        <form id="addCouponForm">
+            <div class="mb-3">
+                <label for="couponCode" class="form-label">Coupon Code</label>
+                <input type="text" class="form-control" id="couponCode" placeholder="Enter coupon code">
+            </div>
+            <div class="mb-3">
+                <label for="validity" class="form-label">Validity</label>
+                <input type="date" class="form-control" id="validity" placeholder="Select validity date">
+            </div>
+            <div class="mb-3">
+                <label for="minPurchase" class="form-label">Minimum Purchase</label>
+                <input type="number" class="form-control" id="minPurchase" placeholder="Enter minimum purchase amount">
+            </div>
+            <div class="mb-3">
+                <label for="minDiscountPercentage" class="form-label">Minimum Discount Percentage</label>
+                <input type="number" class="form-control" id="minDiscountPercentage" placeholder="Enter minimum discount percentage">
+            </div>
+            <div class="mb-3">
+                <label for="maxDiscountValue" class="form-label">Maximum Discount Value</label>
+                <input type="number" class="form-control" id="maxDiscountValue" placeholder="Enter maximum discount value">
+            </div>
+            <div class="mb-3">
+                <label for="discription" class="form-label">Description</label>
+                <input type="text" class="form-control" id="discription" placeholder="Enter coupon description">
+            </div>
+            <button type="button" class="btn btn-primary" onclick="addCoupon()">Add Coupon</button>
+        </form>
+    </div>
+</div>
+
+
+        <!-- Coupon List -->
+        <div class="card">
+            <div class="card-header">
+                Coupon List
+            </div>
+            <div class="card-body">
+                <table class="table" id="couponTable">
+                    <thead>
+                        <tr>
+                            <th>Coupon Code</th>
+                            <th>Discount</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Populate this section dynamically with coupons from the server -->
+                        <% if (coupons && coupons.length > 0) { %>
+                            <% coupons.forEach(coupon => { %>
+                                <tr>
+                                    <td><%= coupon.couponCode %></td>
+                                    <td><%= coupon.maxDiscountValue %></td>
+                                    <% if (coupon.status == 'Active') { %>
+                                        <td>
+                                            <button class="btn btn-danger btn-sm" onclick="Confirm('<%= coupon._id %>')">Delete</button>
+                                        </td>
+                                    <% } else { %>
+                                        <td>
+                                            <p style="color: #ff0000;">Coupon cancelled</p>
+                                        </td>
+                                    <% } %>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="3">No coupons found</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+                <div class="menu-link"><a class="menu-link" href="/admin"> <i class="icon material-icons md-home"></i>
+                    <span class="text">Dashboard</span>
+                </a></div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+
+    window.addEventListener('resize', function () {
+        var mainDivContainer = document.querySelector('.main-div-container');
+        if (window.innerWidth <= 1000) {
+            mainDivContainer.style.marginLeft = '0';
+        } else {
+            mainDivContainer.style.marginLeft = '300px';
+        }
+    });
+</script>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <!-- Add the following script for AJAX -->
+    <script>
+
+    function addCoupon() {
+        const couponCode = document.getElementById('couponCode').value.trim();
+    const validity = document.getElementById('validity').value;
+    const minPurchase = parseFloat(document.getElementById('minPurchase').value);
+    const minDiscountPercentage = parseFloat(document.getElementById('minDiscountPercentage').value);
+    const maxDiscountValue = parseFloat(document.getElementById('maxDiscountValue').value);
+    const discription = document.getElementById('discription').value.trim();
+
+    // Validate couponCode (you can add more specific validation if needed)
+     if (!couponCode) {
+        swal.fire('Error', 'Please enter a valid coupon code.', 'error');
+        return;
+    }
+
+    // Validate validity date
+    if (!validity) {
+        swal.fire('Error', 'Please select a validity date.', 'error');
+        return;
+    }
+
+    // Validate minPurchase
+    if (isNaN(minPurchase) || minPurchase <= 0) {
+        swal.fire('Error', 'Please enter a valid positive value for Minimum Purchase.', 'error');
+        return;
+    }
+
+    // Validate minDiscountPercentage
+    if (isNaN(minDiscountPercentage) || minDiscountPercentage < 0 || minDiscountPercentage > 100) {
+        swal.fire('Error', 'Please enter a valid value for Minimum Discount Percentage between 0 and 100.', 'error');
+        return;
+    }
+
+    // Validate maxDiscountValue
+    if (isNaN(maxDiscountValue) || maxDiscountValue < 0) {
+        swal.fire('Error', 'Please enter a valid positive value for Maximum Discount Value.', 'error');
+        return;
+    }
+
+    // Validate discription (you can add more specific validation if needed)
+    if (!discription) {
+        swal.fire('Error', 'Please enter a valid coupon description.', 'error');
+        return;
+    }
+        const requestData = {
+            couponCode,
+            validity,
+            minPurchase,
+            minDiscountPercentage,
+            maxDiscountValue,
+            discription
+        };
+
+        fetch('/admin/create-coupon', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            Swal.fire({
+                 icon: 'success',
+                 title: 'Success!',
+                 text: 'Coupon added successfully',
+             })
+             .then(()=>{
+                 // Handle the response, for example, update the UI with the new coupon data
+            // console.log('Coupon created:', data);
+
+            // Clear the form fields if needed
+            document.getElementById('couponCode').value = '';
+            document.getElementById('validity').value = '';
+            document.getElementById('minPurchase').value = '';
+            document.getElementById('minDiscountPercentage').value = '';
+            document.getElementById('maxDiscountValue').value = '';
+            document.getElementById('discription').value = '';
+            location.reload();
+             })
+           
+            
+        })
+        .catch(error => {
+            console.error('Error creating coupon:', error);
+            // Handle the error, show an alert or update the UI accordingly
+        });
+    }
+
+    function Confirm(couponId) {
+       
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You won\'t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // User clicked "Yes, delete it!"
+                    cancelCoupon(couponId);
+                }
+            });
+        }
+        function cancelCoupon(couponId){
+         
+            fetch(`/admin/coupon-delete/${couponId}`,{
+                method : 'DELETE',
+                headers : {
+                    'Content-Type' : 'application/json'
+                }
+            }) .then((response) => {
+                    if (response.ok) {
+                        // Order was successfully canceled
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: 'Order canceled',
+                        });
+                        window.location.reload();
+                    } else {
+                        console.error('Error canceling order:', response.statusText);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+
+      
+    </script>   
+
+</body>
+
+</html>
+<%- include('partialsadmin/adminfooter') %>

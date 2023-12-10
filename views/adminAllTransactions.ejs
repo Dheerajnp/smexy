@@ -1,0 +1,81 @@
+<%- include('partialsadmin/adminheader') %>
+<%- include('partialsadmin/adminnav') %>
+<%- include('partialsadmin/adminpageheader') %>
+
+<section class="content-main">
+    <div class="content-header">
+        <h2 class="content-title">All Transactions</h2>
+    </div>
+    <div class="card">
+        <div class="card-body">
+
+                <div class="col-lg-12">
+                    <!-- card-header end// -->
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>User name</th>
+                                    <th>Email</th>
+                                    <th>Date</th>
+                                    <th>Mode of Payment</th>
+                                    <th>Credit/Debit</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                              <% if(allTransactions){ %>  
+                               <% allTransactions.forEach((tran)=>{ %> 
+
+                               
+                                <tr>
+                                    <td><b><%= tran.userName %></b></td>
+                                    <td><%= tran.userEmail %></td>
+                                    <td><%= tran.date.toLocaleString() %></td>
+                                    <td><%= tran.payment %></td>
+                                    <td><%= tran.transactionType %></td>
+                                    <td><%= tran.amount %></td>
+                                </tr>
+                                    <%  }) %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="4" style="text-align: center;">No transactions found</td>
+                                        </tr>
+                                    <% } %>  
+                                
+                            </tbody>
+                        </table>
+                    </div> <!-- table-responsive.// -->
+                </div>
+                <!-- col end// -->
+        </div>
+        <!-- card-body // -->
+    </div>
+    <!-- card end// -->
+    
+    <div class="pagination-area mt-30 mb-50">
+        <nav aria-label="..." class="d-flex justify-content-end">
+            <ul class="pagination ml-auto" id="pagination">
+                <% if (currentPage > 1) { %>
+                    <li class="page-item" id="previousPage" > 
+                        <a style="width: auto;" href="/admin/alltransactions?page=<%= currentPage - 1 %>" class="page-link">Previous</a>
+                    </li>
+                <% } %>
+                
+                <% for (let i = 1; i <= totalPages; i++) { %>
+                    <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                        <a class="page-link" href="/admin/alltransactions?page=<%= i %>"><%= i %></a>
+                    </li>
+                <% } %>
+                
+                <% if (currentPage < totalPages) { %>
+                    <li class="page-item" id="nextPage">
+                        <a style="width: auto;" class="page-link" href="/admin/alltransactions?page=<%= currentPage + 1 %>">Next</a>
+                    </li>
+                <% } %>
+            </ul>
+        </nav>
+    </div>
+    
+</section>
+<%- include('partialsadmin/adminfooter') %>

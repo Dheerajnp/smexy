@@ -1,0 +1,168 @@
+<%- include('userSidePartials/UserHeader',{user}) %>
+
+<%- include('userSidePartials/UserMobileHeader') %>
+
+
+<main class="main">
+    <div class="page-header breadcrumb-wrap">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html" rel="nofollow">Home</a>
+                <span></span> Shop
+                <span></span> Wishlist
+            </div>
+        </div>
+    </div>
+    <section class="mt-50 mb-50">
+        <%   if (wishlist && wishlist.productData && wishlist.productData.length>0) { %>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table class="table shopping-summery text-center">
+                            <thead>
+                                <tr class="main-heading">
+                                    <th scope="col" colspan="2">Product</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Stock Status</th>
+                                    <th scope="col">Action</th>
+                                    <th scope="col">Remove</th>
+                                </tr>
+                            </thead>
+                            <%  wishlist.productData.forEach((product)=>{   %>  
+                            <tbody>
+                                 
+                                <tr>
+                                   <td class="image product-thumbnail"><img src="<%= product.image %>" alt="Product image"></td>
+                                    <td class="product-des product-name">
+                                        <h5 class="product-name"><a href="/product-detail/:<%= product._id %>"><%= product.name %></a></h5>
+                                        <p class="font-xs">"<%= product.description %>" <br> 
+                                        </p>
+                                    </td>
+                                    <td class="price" data-title="Price"><span><%= product.price %> </span></td>
+                                    <td class="text-center" data-title="Stock">
+                                        <% if(product.countInStock > 0) { %>
+                                        <span class="color3 font-weight-bold">In Stock</span>
+                                       <% }else{ %> 
+                                        <span class="color3 font-weight-bold">Out of stock</span>
+                                        <% } %>
+                                    </td>
+                                    <td class="text-right" data-title="Cart">
+                                        <button class="btn btn-sm" onclick="addtoCart('<%= product._id %>')"><i class="fi-rs-shopping-bag mr-5"></i>Add to cart</button>
+                                    </td>
+                                    <td class="action" data-title="Remove"><button onclick="confirmDelete('<%= product._id %>')"><i class="fi-rs-trash"></i></button></td>
+                                </tr>
+                                
+                            </tbody>
+                            <% }) %>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%  } else{%>
+            <div class="container">
+                <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                    <h5>Wishlist</h5>
+                    </div>
+                    <div class="card-body cart">
+                            <div class="col-sm-12 empty-cart-cls text-center">
+                                <img src="/imgs/icons/empty-wishlist.png" width="130" height="130" class="img-fluid mb-4 mr-3">
+                                <h3><strong>Your Wishlist is Empty</strong></h3>
+                                <h4>Add something here :</h4>
+                                <a href="/shop" class="btn btn-primary cart-btn-transform m-3" data-abc="true">continue shopping</a>
+                                
+                            
+                            </div>
+                    </div>
+            </div>
+            </div>
+            </div>
+            <% } %>
+    </section>
+</main>
+
+ <!-- Preloader Start -->
+ <div id="preloader-active">
+    <div class="preloader d-flex align-items-center justify-content-center">
+        <div class="preloader-inner position-relative">
+            <div class="text-center">
+                <h5 class="mb-5">Now Loading</h5>
+                <div class="loader">
+                    <div class="bar bar1"></div>
+                    <div class="bar bar2"></div>
+                    <div class="bar bar3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+function addtoCart(itemId){
+    fetch('/home/cart/wishlistToCart/'+itemId,{
+        method:'POST',
+        headers:{
+            'Content-Type': 'application/json',
+        },
+    })
+    .then((response) =>  response.json())
+    .then(data => {
+        if (data.success) {
+            Swal.fire('Success', 'Item added to Cart', 'success')
+            .then(() => {
+                location.reload();
+            });
+        } else {
+            Swal.fire('Error', 'Failed to add item to the cart.', 'error');
+        }
+    })
+    .catch((err) => {
+        Swal.fire('Error', 'An error occurred while adding the item to the cart.', 'error');
+        console.error(err);
+    })
+}
+
+    function confirmDelete(productId){
+        Swal.fire({
+            title:'Are you Sure ?',
+            text:'You Won\'t be able to revert this!',
+            icon:'Warning',
+            showCancelButton:true,
+            confirmButtonColor:'#d33',
+            cancelconfirmButtonText: 'Yes, cancel it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            cancelOrder(productId);
+        }
+    });
+}
+function cancelOrder(productId) {
+
+  
+    fetch(`/wishlist/remove/${productId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).then((response)=>{
+    if(response.ok){
+    Swal.fire({
+      title: 'success',
+      icon : 'success',
+      text: ' Product is removed from wishlist'
+    })
+    window.location.reload();
+  }else{
+    console.error('Error canceling order:', response.statusText);
+  }
+  })
+  .catch((error)=>{
+    console.log(error.message);
+  })
+}
+  
+</script>
+<%- include('userSidePartials/UserFooter') %>

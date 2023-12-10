@@ -1,0 +1,367 @@
+<%- include('partialsadmin/adminheader') %>
+		<!-- Page wrapper start -->
+		<div class="page-wrapper">
+
+			<!-- Sidebar wrapper start -->
+            <%- include('partialsadmin/adminnav',{dashboard:false}) %>
+			<!-- Sidebar wrapper end -->
+
+			<!-- *************
+				************ Main container start *************
+			************* -->
+			<div class="main-container">
+
+				<!-- Page header starts -->
+                <%- include('partialsadmin/adminpageheader',{dashboard:false,searchFormAction:'#'}) %>
+				<!-- Page header ends -->
+                <div class="d-flex ms-4 me-4 justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h3 class="h3 text-primary">Order Management</h3>
+                    <h4 class="h4 text-black" style="margin-left: 350px;">OrderID:<%= orders.oId %> </h4>
+                    
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        
+                        
+                    </div>
+                </div>
+
+                <!-- Content wrapper scroll start -->
+				<div class="content-wrapper-scroll">
+
+					<!-- Content wrapper start -->
+					<div class="content-wrapper">
+                        <!-- Row start -->
+                        <div class="row gutters bg-white" >
+                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                <div class="card">
+                                    <div class="card-header" style="font-weight: bolder;">General Details</div>
+                                    
+                                   <div class="card-body">
+                                        <form id="orderStatusForm" onsubmit="submitOrderStatusForm('<%= orders._id %>'); return false;">
+                                            <label for="orderDate" style="font-weight: bolder;">Order Date:</label><br>
+                                            <input type="text" class="mt-2 mb-2" value="<%= orders.orderDate.toLocaleString() %>" disabled /><br>
+                                        
+                                            <label for="orderStatus mt-4" style="font-weight: bolder;">Order Status:</label><br>
+                                            <select name="orderStatus" class="form-select mt-2" data-live-search="true">
+                                                <% switch (orders.status) {
+                                                    case 'Pending': %>
+                                                        <option value="Pending" selected>Pending</option>
+                                                        <option value="Processing">Processing</option>
+                                                        <option value="Shipped">Shipped</option>
+                                                        // <option value="Return">Return</option>
+                                                        <option value="Canceled">Canceled</option>
+                                                        <% break;
+                                                    case 'Processing': %>
+                                                        <option value="Pending">Pending</option>
+                                                        <option value="Processing" selected>Processing</option>
+                                                        <option value="Shipped">Shipped</option>
+                                                        // <option value="Return">Return</option>
+                                                        <option value="Canceled">Canceled</option>
+                                                        <option value="Delivered">Delivered</option>
+                                                        <% break;
+                                                    case 'Shipped': %>
+                                                        <option value="Shipped" selected>Shipped</option>
+                                                        <option value="Canceled">Canceled</option>
+                                                        // <option value="Return">Return</option>
+                                                        <option value="Delivered">Delivered</option>
+                                                        <% break;
+                                                   case 'Canceled': %>
+                                                         <option value="Canceled">Canceled</option>
+                                                        <% break;                                                  
+                                                   case 'Return': %>
+                                                         <option value="Return">Return</option>
+                                                        <% break;                                                  
+                                                    default: %>
+                                                       <option value="Delivered">Delivered</option>
+                                                       <option value="Return">Return</option>
+                                                <% } %>
+                                            </select>
+                                            
+                                        <button type="submit" class="btn btn-primary" >Save Order</button>
+                                        <%  if(orders.status!== 'Canceled') { %>
+                                        <a type="button" href="/user-invoice/<%= orders._id %>" class="btn btn-primary w-20 h-15">Download Invoice</a>
+                                        <% } %>
+                                        </form>
+                                        
+                                        
+                                    </div>
+                                    
+                                </div>
+                                
+                                <div class="card">
+                                    <div class="card-header" style="font-weight: bolder;">User Details</div>
+                                  
+                                       
+                                        <div class="card-body">
+                                            <p><strong> Name:</strong> <%= userDetail.name %></p>
+                                            <p><strong>Email:</strong> <%= userDetail.email %></p>
+                                            <p><strong>Gender:</strong> <%= userDetail.gender %></p>
+                                            <p><strong>Blocked:</strong> <%= userDetail.isBlocked ? "Yes" : "No" %></p>
+                                            <p><strong>Mobile:</strong> <%= userDetail.mobile %></p>
+                                    
+                                        
+                                           
+                                        
+                                        </form>
+                                        
+                                        
+                                    </div>
+                                </div>
+                            </div> 
+                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                <div class="card">
+                                    <div class="card-header" style="font-weight: bolder;">Shipping Details</div>
+                                    <div class="card-body">
+                                        <label for="Address" style="font-weight: bolder;">Address Type:</label><br>
+                                        <h6><%= orders.deliveryAddress.addressType.toUpperCase() %></h6>
+                            
+                                        <label for="HouseNo" style="font-weight: bolder;">House Number:</label><br>
+                                        <h6><%= orders.deliveryAddress.HouseNo %></h6>
+                            
+                                        <label for="Street" style="font-weight: bolder;">Street:</label><br>
+                                        <h6><%= orders.deliveryAddress.Street %></h6>
+                            
+                                        <label for="Landmark" style="font-weight: bolder;">Landmark:</label><br>
+                                        <h6><%= orders.deliveryAddress.Landmark %></h6>
+                            
+                                        <label for="Pincode" style="font-weight: bolder;">Pincode:</label><br>
+                                        <h6><%= orders.deliveryAddress.pincode %></h6>
+                            
+                                        <label for="City" style="font-weight: bolder;">City:</label><br>
+                                        <h6><%= orders.deliveryAddress.city %></h6>
+                            
+                                        <label for="District" style="font-weight: bolder;">District:</label><br>
+                                        <h6><%= orders.deliveryAddress.district %></h6>
+                            
+                                        <label for="State" style="font-weight: bolder;">State:</label><br>
+                                        <h6><%= orders.deliveryAddress.State %></h6>
+                            
+                                        <label for="Country" style="font-weight: bolder;">Country:</label><br>
+                                        <h6><%= orders.deliveryAddress.Country %></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                <div class="card">
+                                    <div class="card-header" style="font-weight: bolder;">Payment Details</div>
+                                    <div class="card-body">
+                                        <label for="BillTotal" style="font-weight: bolder;">Bill Total:</label>
+                                        <h6> INR <%= orders.billTotal %></h6>
+                            
+                                        <label for="PaymentMethod" style="font-weight: bolder;">Payment Method:</label><br>
+                                        <h6><%= orders.paymentMethod %></h6>
+                            
+                                        <label for="PaymentStatus" style="font-weight: bolder;">Payment Status:</label><br>
+                                        <h6><%= orders.paymentStatus %></h6>
+                                    </div>
+                                </div>
+                                <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="card-header" style="font-weight: bolder;">User Requests</div>
+
+
+
+                            <% if (orders.requests && orders.requests.length > 0) { %>
+                            <% if (orders.status == 'Canceled' && orders.requests[0].status === 'Pending') { %>
+                            <strong class="text-danger mb-3 text-center">Order Canceled</strong>
+                            <input type="text" value="<%= orders.requests[0].reason  %>" readonly
+                                class="mb-3 text-center">
+                            <button class="btn btn-primary"
+                                onclick="refundAmount('<%= orders._id %>','<%= orders.user._id %>')">Refund
+                                Amount</button>
+                            <% } else if (orders.status == 'Return' && orders.requests[0].status === 'Pending') { %>
+                            <strong class="text-brand mb-3 mt-2 text-center">Order Returned <span
+                                    style="font-size: 14px; color: black;">(Reason)</span></strong>
+                            <input type="text" value="<%= orders.requests[0].reason  %>" readonly
+                                class="mb-3 text-center border-0">
+                            <button class="btn btn-success w-50 mb-3 text-center ms-5"
+                                onclick="refundAmount('<%= orders._id %>','<%=  orders.user._id %>')">Accept Return
+                                Order</button>
+                            <% } else { %>
+                            <!-- Display other request details as needed -->
+                            <% orders.requests.forEach(request => { %>
+                            <!-- Example: Displaying FedEx tracking details -->
+                            <% if (request.type == 'Return') { %>
+                            <div class="pt-3">Order return accepted</div>
+                            <span><a href="#" class="text-decoration-underline" target="_blank"></a> <i
+                                    class="bi bi-box-arrow-up-right"></i></span>
+                            <% } %>
+                            <% }) %>
+                            <% } %>
+                            <% } else { %>
+                            <p class="h6 text-center">No requests available.</p>
+                            <% } %>
+
+
+                        </div>
+                        <hr>
+                    </div>
+                            </div>
+                            
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-50 mt-20 order-info-wrap">
+                            
+                                <div class="col-lg-7">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th width="40%">Product</th>
+                                                    <th width="20%">Unit Price</th>
+                                                    <th width="20%">Quantity</th>
+                                                    <th width="20%" class="text-end">Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- Loop through products in the order -->
+                                                <% orders.items.forEach((item) => { %>
+                                                    <tr>
+                                                        <td>
+                                                            <a class="itemside" href="#">
+                                                                <div class="left">
+                                                                    <img src="/<%= item.image %>" width="40" height="40" class="img-xs" alt="<%= item.name %>">
+                                                                </div>
+                                                                <div class="info"> <%= item.name %> </div>
+                                                            </a>
+                                                        </td>
+                                                        <td> &#8377;<%= item.productPrice %></td>
+                                                        <td> <%= item.quantity %></td>
+                                                        <td class="text-end"> &#8377;<%= item.price %></td>
+                                                    </tr>
+                                                   
+                                                <% }); %>
+                                                <tr>
+                                                    <td colspan="4">
+                                                        <article class="float-end">
+                                                            <dl class="dlist">
+                                                                <dt>Subtotal:</dt>
+                                                                <dd>&#8377;<%= orders.billTotal %></dd>
+                                                            </dl>
+                                                            <dl class="dlist">
+                                                                <dt>Grand total:</dt>
+                                                                <dd> <b class="h5">&#8377;<%= orders.billTotal %></b> </dd>
+                                         
+                                                            </dl>
+                                                            <dl class="dlist">
+                                                                <dt class="text-muted">Payment Status:</dt>
+                                                                <dd>
+                                                                    <span class="badge rounded-pill alert-success text-success"><%= orders.status %></span>
+                                                                </dd>
+                                                            </dl>
+                                                        </article>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            
+                                        </table>
+                                    </div> <!-- table-responsive// -->
+                                    <!-- <a class="btn btn-primary" href="page-orders-tracking.html">View Order Tracking</a> -->
+                                </div> <!-- col// -->
+                                <div class="col-lg-1"></div>
+                                <div class="col-lg-4">
+                                    <!-- <div class="box shadow-sm bg-light">
+                                        <h6 class="mb-15">Payment info</h6>
+                                        <!-- <p>
+                                            
+                                            <img src="assets/imgs/card-brands/2.png" class="border" height="20"> Master Card **** ****  <br>
+                                            Business name:  <br>
+                                            Phone:
+                                        </p> 
+                                    </div>                            <!-- <div class="h-25 pt-4">
+                                        <div class="mb-3">
+                                            <label>Notes</label>
+                                            <textarea class="form-control" name="notes" id="notes" placeholder="Type some note"></textarea>
+                                        </div>
+                                        <button class="btn btn-primary">Save note</button>
+                                    </div> -->
+                            </div>
+                            
+                        </div> <!-- card-body end// -->
+                    </div>
+                    </div>
+                    <script>
+                        function submitOrderStatusForm(orderId) {
+                            const newStatus = document.querySelector('select[name="orderStatus"]').value;
+                            // Make the fetch request
+                            fetch(`/admin/order-management/update-order-status/${orderId}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ orderStatus: newStatus }),
+                            })
+                                .then((response) => response.json())
+                                .then((data) => {
+                                    if (data.success) {
+                                        // Handle success
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Order Status Updated',
+                                            text: 'The order status has been updated successfully.',
+                                        })
+                                        .then(()=>{
+                                            location.reload();
+                                        })
+                                    } else {
+                                        // Handle error
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error Updating Order Status',
+                                            text: data.message || 'An error occurred while updating the order status.',
+                                        });
+                                    }
+                                })
+                                .catch((error) => {
+                                    // Handle fetch error
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Fetch Error',
+                                        text: 'An error occurred while making the request.',
+                                    });
+                                });
+                        }
+
+                        // ORDER RETURN
+                        function refundAmount(orderId, userId){
+                            fetch(`/admin/order-management/return-order-request`,{
+                                method:'post',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ orderId,userId }),
+                                
+                            }).then((response) => response.json())
+                                .then((data) => {
+                                    if (data.success) {
+                                        // Handle success
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Refund processed',
+                                            text: 'The refund has been sent successfully.',
+                                        })
+                                        .then(()=>{
+                                            location.reload();
+                                        })
+                                    } else {
+                                        // Handle error
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: data.message || 'An error occurred while updating the order status.',
+                                        });
+                                    }
+                                })
+                                .catch((error) => {
+                                    // Handle fetch error
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Fetch Error',
+                                        text: 'An error occurred while making the request.',
+                                    });
+                                });
+                        }
+                    </script>
+                    
+
+                    <%- include('partialsadmin/adminfooter') %>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('partialsadmin/adminheader.ejs') %>
+<%- include('partialsadmin/adminnav.ejs') %>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Category Offers</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <!-- Your custom styles -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+            margin-top: 60px;
+           
+        }
+
+        .container {
+            margin-top: 30px;
+            margin-left: 300px;
+        }
+
+        .card {
+            margin-bottom: 30px;
+        }
+        @media (max-width: 750px) {
+    .container {
+        margin-left: 0; /* Cancel the margin-left */
+    }
+}
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Add Offer Form -->
+        <div class="card">
+            <div class="card-header">
+                <h5>Add Offer to Category</h5>
+            </div>
+            <div class="card-body">
+                <form id="offerForm">
+                    <div class="form-group mb-3">
+                        <label for="productCategory">Category</label>
+                        <select class="form-control" id="productCategory" name="category">
+                            <% categories.forEach(category=> { %>
+                            <option value="<%= category._id %>">
+                                <%= category.name %>
+                            </option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="discount">Discount Percentage:</label>
+                        <input type="number" class="form-control" id="discount" name="discount" placeholder="Enter discount percentage" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Add Offer</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Category Offers -->
+        <!-- <div class="card">
+            <div class="card-header">
+                <h5>Category Offers</h5>
+            </div>
+            <div class="card-body"> -->
+                <!-- Display category offers dynamically here -->
+                <!-- <div class="alert alert-warning" role="alert">
+                    No offers available for this category.
+                </div>
+            </div>
+        </div> -->
+        <a class="menu-link" href="/admin"> <i class="icon material-icons md-home"></i>
+            <span class="text" style="color: #000000;">Dashboard</span>
+        </a>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const offerForm = document.getElementById('offerForm');
+            offerForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const discountInput = document.getElementById("discount");
+                const discountValue = parseInt(discountInput.value);
+
+                if (isNaN(discountValue) || discountValue <= 0 || discountValue > 100) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid Discount Percentage',
+                        text: 'Please enter a valid discount percentage between 1 and 100.',
+                    });
+                } else {
+                    addOffer();
+                }
+            });
+        });
+
+        function addOffer() {
+            const discountInput = document.getElementById("discount").value;
+            const categoryInput = document.getElementById("productCategory").value;
+
+            fetch('/admin/category-offers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    category: categoryInput,
+                    discount: discountInput
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Offer Added Successfully',
+                            text: 'The offer has been added to the category.'
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Failed to Add Offer',
+                            text: 'There was an error while adding the offer. Please try again.'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Server Error',
+                        text: 'There was a server error. Please try again later.'
+                    });
+                });
+        }
+    </script>
+
+       
+ 
+
+    <%- include('partialsadmin/adminfooter.ejs') %>

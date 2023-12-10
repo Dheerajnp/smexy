@@ -1,0 +1,87 @@
+<%- include('partialsadmin/adminheader') %>
+<%- include('partialsadmin/adminnav') %>
+<%- include('partialsadmin/adminpageheader') %>
+        <section class="content-main">
+            <div class="content-header">
+                <h2 class="content-title">Users list</h2>
+                <div>
+                    <a href="#" class="btn btn-primary"><i class="material-icons md-plus"></i> Create new</a>
+                </div>
+            </div>
+            <div class="card mb-4">
+                <header class="card-header">
+                    <div class="row gx-3">
+
+                        <nav aria-label="..." class="d-flex justify-content-end">
+                            <ul class="pagination ml-auto " id="pagination">
+                                <% if(page>1){ %>
+                              <li class="page-item" id="previousPage">
+                               <a href ="/admin/users?page=<%= currentPage-1 %>"> <span class="page-link" >Previous</span></a>
+                              </li>
+                              <% } %>
+                              <% for (let i = 1; i <= totalPages; i++) { %>
+                                <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                  <a class="page-link" href="/admin/users?page=<%= i %>"><%= i %></a>
+                                </li>
+                              <% } %>
+                              <!-- Pagination links will be added dynamically here -->
+                            <% if(page<totalPages){  %>
+                              <li class="page-item" id="nextPage">
+                                <a class="page-link" href="/admin/users?page=<%= currentPage+1 %>">Next</a>
+                              </li>
+                              <% } %>
+                            </ul>
+                          </nav>
+                </header>
+                <div class="card-body">
+                    <div class="container-fluid">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-sm borrder-2 text-center">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">S.No</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col" >Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% users?.forEach((element,index) => { %>
+                                    <tr class="align-middle">
+                                        <td><%= index+1 %></td>
+                                        <td><%= element.name %></td>
+                                        <td><%= element.email %></td>
+
+                    
+                                        <td>
+                                            <form action="users/block-user/<%= element._id %>" method="POST">
+                                                <button type="submit" class="btn btn-<%= element.isBlocked ? 'danger' : 'success' %> btn-small">
+                                                    <%= element.isBlocked ? 'Unblock' : 'Block' %>
+                                                    <i class="fa-solid fa-<%= element.isBlocked ? 'lock' : 'unlock' %>" style="color: <%= element.isBlocked ? '#d7dce5' : '#e9ecf1' %>; margin-left: 3px;"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <% 
+                                    })
+                                    %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+            <!-- <div class="pagination-area mt-15 mb-50">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-start">
+                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                        <li class="page-item"><a class="page-link" href="#">02</a></li>
+                        <li class="page-item"><a class="page-link" href="#">03</a></li>
+                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                        <li class="page-item"><a class="page-link" href="#">16</a></li>
+                        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                    </ul>
+                </nav>
+            </div> -->
+        </section> <!-- content-main end// -->
+ <%- include('partialsadmin/adminfooter') %>

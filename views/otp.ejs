@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <title>Smexy</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/assets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link href="/assets/css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <!-- Add a <span> element to display the timer -->
+        <section class="content-main mt-20 mb-20">
+            <div class="card mx-auto card-login">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Email verification with OTP</h4>
+                    
+                    <form action="/postotp" method="post">
+                       <%  if(err){ %>
+                            <p class="text-danger" id="errorShow"><%= err %></p>
+                        <% } %>
+
+                        <p class="text-success" id="successShow"></p>
+                        <p class="text-success" id="successShow"></p>
+                        <div class="mb-3" id="otpField">
+                            <span class="mobile-text mb-2">Enter the code that we just send on your email <b class="text-danger"></b></span>
+                            <input class="form-control mt-20" type="text" id='otp' name="otp" placeholder="Enter OTP">
+                        </div>
+                        <div id="otp-timer">
+                           <div id="timer">
+                                    01:00
+                           </div> 
+                        </div>
+                        <div class="mb-4" id="loginBtn">
+                            
+
+                            <button type="submit" class="btn btn-primary w-100"> Verify OTP </button>
+                        </div> 
+
+                        <!-- <div class="text-center mt-5">
+                            <span class="d-block mobile-text">Don't receive the code?</span>
+                           
+                          
+                                <button class="btn btn-primary  text-light cursor" type="button" id="resend" onclick="resendOtp()">Resend</button>
+                         
+                               
+                           
+                           
+                        </div> -->
+                        <div class="text-center mt-5">
+                            <span class="d-block mobile-text">Didn't receive the code?</span>
+                            <button class="btn btn-primary text-light cursor text-center" type="button" id="resend" onclick="resendOtp()" style="display: none;">Resend</button>
+                            
+                        </div>
+                        
+                        <!-- form-group// -->
+                    </form>
+                </div>
+                
+
+            </div>
+        </section>
+
+
+<script>
+   function showResendButton() {
+            var resendButton = document.getElementById('resend');
+            resendButton.style.display = 'block';
+
+            // Add a click event listener to hide the button when clicked
+            resendButton.addEventListener('click', function () {
+                resendButton.style.display = 'none';
+            });
+        }
+
+        // Set a timeout to call the showResendButton function after 1 minute (60,000 milliseconds)
+        setTimeout(showResendButton, 60000);
+        async function resendOtp() {
+
+            let response = await fetch('/resend',{
+                method:'POST',
+                headers:{'Content-Type':'application/json'},
+            })
+            if(response.status === 200) {
+                document.getElementById('successShow').innerHTML = 'Otp Send Succesfully'
+            } else {
+                window.location.href = '/signup'
+            }
+        }
+
+        // otp
+        var timer;
+        var Otptimer = document.getElementById('timer');
+        var resendTimer = document.getElementById('resend');
+
+        function Otpstarttimer(minute,sec){
+            clearInterval(timer)
+          timer = setInterval(()=>{
+            Otptimer.innerHTML = formatTime(minute) + ':' + formatTime(sec);
+            if(minute==0&&sec==0){
+                clearInterval(timer);
+            }else{
+                if(sec == 0){
+                    minute --;
+                    sec =  59;
+                }else{
+                    sec --;
+                }
+            }
+          },1000)
+        };
+        function formatTime(time){
+            return time < 10 ? '0' + time : time;
+        }
+        Otpstarttimer(1,0);
+
+        resendTimer.addEventListener('click',function(){
+            Otpstarttimer(1,0);
+        })
+
+</script>
+
+</body>
+
+
+</html>

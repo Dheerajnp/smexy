@@ -1,0 +1,174 @@
+<%- include('partialsadmin/adminheader') %>
+<%- include('partialsadmin/adminnav') %>
+<%- include('partialsadmin/adminpageheader') %>
+
+<div
+    class="d-flex ms-4 me-4 justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h3 class="h3 text-primary">Category Management</h3>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                data-bs-target="#createCategoryModal">
+                + create category
+            </button>
+        </div>
+
+    </div>
+</div>
+<!-- Modal for creating a category -->
+<div class="modal fade" id="createCategoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Create Category</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="/admin/category-management/newCategory" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Category Name:</label>
+                        <input type="text" id="name" name="name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Category Description:</label>
+                        <textarea id="description" name="description" class="form-control" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Category Image:</label>
+                        <input type="file" id="image" name="image" accept="image/*" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Category</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="table align-middle mb-0  bg-white">
+    <thead class="bg-light text-center">
+        <tr>
+            <th>S.No</th>
+            <th>Image</th>
+            <th>Category Name</th>
+            <th>Description</th>
+            <th colspan="2">Actions</th>
+
+        </tr>
+    </thead>
+    <tbody class="text-center">
+        <% categories.forEach((category, index) => { %>
+        <tr>
+            <td><%= index+1 %></td>
+            <td>
+                <div class="d-flex align-items-center">
+                    <% if (category.image) { %>
+                    <img src="../<%=category.image %>" alt="<%= category.name %> Image" style="width: 45px; height: 45px"
+                        class="rounded-circle" />
+                    <% } %>
+
+            </td>
+            <td>
+                <div class="ms-3 ">
+                    <p class="fw-bold mb-1"><%= category.name %></p>
+                </div>
+                </div>
+            </td>
+            <td>
+                <p class="fw-normal mb-1"><%= category.description %></p>
+            </td>
+            <td>
+                <button type="button" class="btn btn-primary" style="height: 40px; display: flex;"
+                    data-bs-toggle="modal" data-bs-target="#editModal<%= category._id %>"
+                    data-category-id="<%= category._id %>">
+                    <i class="fa fa-edit"></i> Edit
+                </button>
+
+                <!-- Modal for editing category -->
+                <div class="modal fade" id="editModal<%= category._id %>" tabindex="-1" role="dialog"
+                    aria-labelledby="editModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editModalLabel">Edit Category</h5>
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Edit category form -->
+                                <form method="POST" action="category-management/edit-category/<%= category._id %>">
+                                    <div class="form-group mb-3">
+                                        <label for="editName">Name:</label><br>
+                                        <input type="text" class="form-control" id="editName" name="editName"
+                                            value="<%= category.name %>" required>
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label for="editDescription">Description:</label>
+                                        <br>
+                                        <textarea class="form-control" id="editDescription" name="editDescription"
+                                            required><%= category.description %></textarea>
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label for="editImage">Category Image:</label>
+                                        <br>
+                                        <input type="file" class="form-control" id="editImage" name="editImage"
+                                            accept="image/*">
+                                    </div>
+
+
+                                    <!-- Add additional fields as needed -->
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <button type="button" class="btn btn-danger" style="height: 40px; display: flex;"
+                    onclick="deleteUser('<%= category._id %>')">
+                    <i class="material-icons md-trash"></i> Delete
+                </button>
+
+                <script>
+                    function deleteUser(categoryId) {
+                        // Display a confirmation dialog
+                        const confirmDelete = window.confirm("Are you sure you want to delete this user?");
+
+                        if (confirmDelete) {
+                            fetch('category-management/delete-category/' + categoryId, {
+                                    method: 'DELETE'
+                                })
+                                .then(response => {
+                                    if (response.ok) {
+                                        // User was successfully deleted
+                                        // Reload the page to update the list of users
+                                        alert('Successfully deleted');
+                                        window.location.reload();
+                                    } else {
+                                        // Handle error
+                                        alert('An error occurred while deleting the user.');
+                                    }
+                                });
+                        } else {
+                            window.location.reload();
+                        }
+                    }
+                </script>
+            </td>
+        </tr>
+        <% }) %>
+    </tbody>
+</table>
+
+
+
+
+
+<br>
+<br>
+<%- include('partialsadmin/adminfooter') %>

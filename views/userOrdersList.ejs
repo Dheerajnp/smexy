@@ -1,0 +1,154 @@
+<%- include('userSidePartials/UserHeader',{user}) %>
+
+<%- include('userSidePartials/UserMobileHeader') %>
+<section class="pt-150 pb-150">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <% if (orderDetails && orderDetails.length > 0) { %>
+                <% orderDetails.forEach((order) => { %>
+                <br>
+                <div class="card card-2">
+                    <div class="card-body">
+                        <div class="media">
+                            <div class="media-body my-auto text-right">
+                                <div class="row my-auto flex-column flex-md-row">
+                                    <div class="col my-auto">
+                                        <h6 class="mb-0">OrderID:<%= order.oId %></h6>
+                                    </div>
+                                    <div class="col-auto my-auto">
+                                        <small>Status: <%= order.status %></small>
+                                    </div>
+                                    <!-- <div class="col my-auto">
+                                <small>Size: M</small>
+                            </div> -->
+                                    <div class="col my-auto">
+                                        <small>Date: <%= order.orderDate.toLocaleString() %></small>
+                                    </div>
+                                    <div class="col my-auto">
+                                        <small>Payment Method:
+                                            <%= order.paymentMethod %></small>
+                                    </div>
+
+                                    <div class="col my-auto">
+                                        <h6 class="mb-0"> Total: &#8377;<%= order.billTotal %></h6>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <hr class="my-3">
+                        <% if(order.status==='Canceled'){ %>
+                        <div class="row d-flex justify-content-start" id="cancellationMessage">
+                            <span class="text-danger  d-flex justify-content-start w-25"><svg
+                                    xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
+                                    <path fill="#282C3F" fill-rule="nonzero"
+                                        d="M15.854 8.146a.495.495 0 0 0-.703 0L12 11.296l-3.15-3.15a.495.495 0 0 0-.704 0 .495.495 0 0 0 0 .703L11.297 12l-3.15 3.15a.5.5 0 1 0 .35.85.485.485 0 0 0 .349-.146l3.15-3.15 3.151 3.15a.5.5 0 0 0 .35.147.479.479 0 0 0 .35-.147.495.495 0 0 0 0-.703L12.702 12l3.15-3.15a.495.495 0 0 0 0-.704z">
+                                    </path>
+                                </svg> Order has been canceled.</span>
+                            <div class=" d-flex justify-content-end">
+                                <a class="btn btn-small w-25 h-25" href="/order-details/<%= order._id %>">Order
+                                    Details</a>
+                            </div>
+
+
+
+
+                            <% }else{ %>
+                            <div class="row">
+                                <% if(order.status!=="Delivered" && order.status!=="Return"){ %>
+                                <button type="button" class="btn btn-small w-25 h-25"
+                                    onclick="cancelOrder('<%= order._id %>')">cancel
+                                    order</button>
+                                <% }else if(order.status ==='Return'&& order.requests[0].status=='Pending') {%>
+                                <div class="col-lg-6 col-md-6  d-flex justify-content-start">
+                                    <p class="badge bg-danger">Return request sent</p>
+                                </div>
+
+                                <% }else{ %>
+                                <% if(order.status!=='Delivered'){ %>
+                                <div class="col-lg-6 col-md-6  d-flex justify-content-start">
+                                    <p class="badge bg-success">Return processed.</p>
+                                </div>
+                                <% } %>
+
+                                <% } %>
+                                <div class=" d-flex justify-content-end">
+                                    <a class="btn btn-small w-25 h-25" href="/order-details/<%= order._id %>">Order
+                                        Details</a>
+                                </div>
+                                <% } %>
+                            </div>
+
+                            <!-- Bootstrap Confirmation Modal -->
+                            <div class="modal" id="confirmationModal" tabindex="-1"
+                                aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header" <h5 class="modal-title" id="confirmationModalLabel">
+                                            Confirm Order Cancellation</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to cancel this order? Please
+                                            provide a reason below (optional):
+                                            <textarea id="cancellationReason" class="form-control" rows="3"></textarea>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-danger"
+                                                id="confirmCancellationButton">Confirm
+                                                Cancellation</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                    </div>
+
+
+                    <% }) %>
+                    <% }else{ %>
+                    <div class="row">
+                        <h4>No Orders Found Please continue Shopping</h4>
+                        <a href="/shop" type="button" class="btn">continue Shoping</a>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <nav aria-label="..." class="d-flex justify-content-end">
+            <ul class="pagination ml-auto" id="pagination">
+              <% if (page > 1) { %>
+                <li class="page-item" id="previousPage">
+                  <a href="/userorders?page=<%= currentPage - 1 %>#orders">
+                    <span class="page-link">Previous</span>
+                  </a>
+                </li>
+              <% } %>
+              <% for (let i = 1; i <= totalPages; i++) { %>
+                <li class="page-item <%= currentPage === i ? 'active' : '' %>
+                ">
+                  <a class="page-link" href="/userorders?page=<%= i %>#orders"><%= i %></a>
+                </li>
+              <% } %>
+              <!-- Pagination links will be added dynamically here -->
+              <% if (page < totalPages) { %>
+                <li class="page-item" id="nextPage">
+                  <a class="page-link" href="/userorders?page=<%= currentPage + 1 %>#orders">Next</a>
+                </li>
+              <% } %>
+            </ul>
+          </nav>
+</section>
+
+
+
+
+<%- include('userSidePartials/UserFooter') %>
