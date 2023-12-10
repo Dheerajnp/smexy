@@ -318,7 +318,7 @@ async function postVerifyOtp(req, res) {
 
     // Compare the entered OTP with the stored OTP code
     if (otp == otpverify.code) {
-
+      console.log("scvkbvjkcbjbvf")
       user.isverified = true;
       let response = await Userdb.insertMany([req.session.userDetails])
       let userdata = await Userdb.findOne({email:user.email})

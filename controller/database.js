@@ -1,7 +1,12 @@
 const mongoose=require('mongoose');
-mongoose.connect("mongodb://127.0.0.1:27017/ecommerce",{
+require('dotenv').config({path:'config.env'});
+mongoose.connect(process.env.MONGODB,{
     useNewUrlParser:true,
-    useUnifiedTopology:true
+    useUnifiedTopology:true,
+    tlsAllowInvalidHostnames:true,
+    tlsAllowInvalidCertificates:true,
+    ssl:true
+
 })
 .then(()=>{
     console.log(`Mongodb Connected`)
