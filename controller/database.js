@@ -15,7 +15,7 @@ mongoose.connect(process.env.MONGODB,{
     console.log("Error connecting to db:",err)
     process.exit(1)
 })
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 
 var userSchema=new mongoose.Schema({
     name:{
