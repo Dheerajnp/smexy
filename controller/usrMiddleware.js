@@ -34,7 +34,7 @@ const isBlocked = async (req, res, next) => {
 }
 
 
-let homepage = async (req, res) => {
+let homepage = async (req, res,next) => {
   try {
     // Fetch products from your database
     
@@ -51,15 +51,14 @@ let homepage = async (req, res) => {
    
   } catch (error) {
     console.error(error);
-    res.status(500).json({
-      message: 'Internal Server Error'
-    });
+    res.status(500)
+    next();
   }
 }
 
 
 
-const loginpage = async (req, res) => {
+const loginpage = async (req, res,next) => {
   try {
     if (req.session.email) {
       res.redirect('/')
@@ -70,7 +69,8 @@ const loginpage = async (req, res) => {
   } catch (err) {
     // Handle any errors that might occur during rendering
     console.error(err);
-    res.status(500).send('Internal Server Error');
+    res.status(500);
+    next();
   }
 };
 
@@ -115,20 +115,23 @@ const loginpost = async (req, res, next) => {
     }
   } catch (error) {
     console.error('Error during login:', error);
-    res.status(500).send('Internal Server Error');
+    res.status(500);
+    next();
   }
 };
 
-const loadOTP = async (req, res) => {
+const loadOTP = async (req, res, next) => {
   try {
     res.render('otp',{err:""})
   } catch (error) {
     console.log(error.message);
+    res.status(500);
+    next();
   }
 }
   
 
-async function resendOTP(req, res) {
+async function resendOTP(req, res, next) {
     try {
       const { email } = req.session.user;
       const user = req.session.otp;
@@ -153,7 +156,8 @@ async function resendOTP(req, res) {
       res.redirect('/otp');
     } catch (error) {
       console.log(error.message);
-      res.status(500).send('Error resending OTP.');
+      res.status(500);
+      next();
     }
   };
   
@@ -217,7 +221,7 @@ function generateReferralCode() {
   return shortid.generate();
 }
 
-async function postRegister(req, res) {
+async function postRegister(req, res, next) {
   const {
     name,
     email,
@@ -283,15 +287,13 @@ async function postRegister(req, res) {
     // Redirect the user to the OTP verification page
     res.redirect('/otp');
   } catch (error) {
-    res.json({
-      status: "Failed",
-      message: error.message,
-    });
+    res.status(500);
+    next();
   }
 }
 
 
-async function postVerifyOtp(req, res) {
+async function postVerifyOtp(req, res, next) {
   try {
     const {
       otp
@@ -393,7 +395,7 @@ let signuppage = (req, res, next) => {
 
 
 
-const shopUser = async (req, res) => {
+const shopUser = async (req, res, next) => {
   try {
     let user = (req.session.email._id) ? true : false
     const itemsPerPage = 6;
@@ -481,14 +483,13 @@ const shopUser = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res.status(500).render('500error', {
-      message: "Some error occurred on the shop side"
-    });
+    res.status(500);
+    next();
   }
 } 
 
 
-const ProductDetailedView = async (req, res) => {
+const ProductDetailedView = async (req, res, next) => {
   try {
 
     const id = req.params.productId;
@@ -532,17 +533,15 @@ const ProductDetailedView = async (req, res) => {
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({
-      error: 'Internal Server Error',
-      errorMessage: error.message
-    });
+    res.status(500);
+    next();
   }
 }
 
 
 
 //profile 
-const userProfileGet = async (req, res) => {
+const userProfileGet = async (req, res, next) => {
   try {
     let user = (req.session.email._id) ? true : false
     const category = await Category.find({
@@ -591,13 +590,12 @@ if (walletTransactions && walletTransactions.transactions) {
 
   } catch (err) {
     console.log(err);
-    res.status(500).render('500error', {
-      message: 'Internal server error' + err
-    })
+    res.status(500);
+    next();
   }
 }
 
-const userAddAddress = async (req, res) => {
+const userAddAddress = async (req, res, next) => {
   try {
     // Get the address data from the request body
     const {
@@ -702,7 +700,7 @@ const userAddAddress = async (req, res) => {
   }
 };
 
-const userEditAddress = async (req, res) => {
+const userEditAddress = async (req, res, next) => {
   try {
     const {
       addressType,
@@ -763,10 +761,8 @@ const userEditAddress = async (req, res) => {
 
   } catch (err) {
     console.error(err);
-    res.status(500).json({
-      success: false,
-      message: 'Internal server error'
-    });
+    res.status(500);
+    next();
   }
 }
 
@@ -812,7 +808,8 @@ const userdeleteAddress = async (req, res) => {
       message: 'Address deleted successfully'
     });
   } catch (err) {
-    next(err);
+    res.status(500);
+    next();
   }
 }
 
@@ -830,11 +827,6 @@ const userDetailEdit = async (req, res) => {
         error: 'All fields are required.'
       });
     }
-
-    // Add more validation as needed, e.g., email format, mobile format, etc.
-
-    // 3. If you need to update the user's profile in your database, do it here
-    // Example (assuming you're using Mongoose and have a User model):
     const userId = req.session.email._id;
 
     const user = await Userdb.findById(userId); // Replace with your own logic to retrieve the user
@@ -844,10 +836,6 @@ const userDetailEdit = async (req, res) => {
         message: 'Authentication is Required'
       })
     }
-
-    // if(user.isBlocked){
-    //   return res.status(409).json({success:false,message:'User is Blocked'})
-    // }
 
     user.firstName = firstName;
     user.email = email;
@@ -860,7 +848,8 @@ const userDetailEdit = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    next(err)
+    res.status(500);
+    next()
   }
 }
 
@@ -903,7 +892,8 @@ const userOrderDetails = async (req, res) => {
 
   } catch (error) {
     console.log(err);
-    res.status(500).send('Error deleting the order');
+    res.status(500);
+    next();
   }
 }
 
@@ -1093,9 +1083,8 @@ const resetPasswordGET = async (req, res) => {
 
   } catch (error) {
     console.error(error);
-    res.status(500).render('500error', {
-      message: 'Error Occured' + error
-    })
+    res.status(500);
+    next();
   }
 }
 
@@ -1128,9 +1117,8 @@ const resetPasswordPost = async (req, res) => {
     })
   } catch (error) {
     console.error(error);
-    return res.status(500).render('500error', {
-      message: 'Error saving the new password'
-    });
+    res.status(500);
+    next();
   }
 
 }
@@ -1150,7 +1138,6 @@ const wallet = require('../models/walletModel');
 
 const changePassword = async (req, res) => {
   try {
-
     let user = (req.session.email._id) ? true : false
     const userId = req.session.email._id
     const userDetails = await Userdb.findOne({
@@ -1221,10 +1208,13 @@ const returnOrder = async (req, res) => {
       res.status(200).json({success : true})
     
   } catch (error) {
-      console.log(error.message+"erroreerrr");
-      res.status(500).json({ message: 'Failed to Return order' });
+      console.log(error.message);
+      res.status(500);
+      next();
   }
 };
+
+
 let logout = (req, res, next) => {
   req.session.email = false;
   console.log("Session destroyed");
@@ -1268,7 +1258,8 @@ const userOrderInvoice = (req, res) => {
     })();
   } catch (err) {
     console.error(err);
-    res.status(500).send('Failed to generate the invoice.');
+    res.status(500);
+    next();
   }
 };
 
@@ -1297,6 +1288,8 @@ const CouponApply = async (req, res) => {
 
   } catch (error) {
     console.log(error.message);
+    res.status(500);
+    next();
   }
 }
 
@@ -1310,7 +1303,8 @@ const couponRemove = (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ success: false, message: 'Failed to remove coupon' });
+    res.status(500);
+    next();
   }
 };
 
@@ -1341,11 +1335,12 @@ const userOrderGet = async(req,res)=>{
     })
   } catch (error) {
     console.error(error);
-    res.status(500).json({ success: false, message: 'Couldnt get orders' });
+    res.status(500);
+    next();
   }
 }
 
-const getReferral = async(req,res)=>{
+const getReferral = async(req,res,next)=>{
   try {
     const user = await Userdb.findOne({_id:req.session.email._id});
     const category = await Category.find({status:'Active'})
@@ -1355,7 +1350,8 @@ const getReferral = async(req,res)=>{
     })
     
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Couldnt get referral' });
+    res.status(500);
+    next();
   }
 }
 

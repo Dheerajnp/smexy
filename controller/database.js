@@ -2,7 +2,6 @@ const mongoose=require('mongoose');
 require('dotenv').config({path:'config.env'});
 mongoose.connect(process.env.MONGODB,{
     useNewUrlParser:true,
-    useUnifiedTopology:true,
     tlsAllowInvalidHostnames:true,
     tlsAllowInvalidCertificates:true,
     ssl:true

@@ -4,7 +4,7 @@ const isAdminLogin = (req,res,next)=>{
             next();
          } 
          else{
-            res.redirect('/signin')
+            res.redirect('/admin/signin')
          }
     }
     catch(error){

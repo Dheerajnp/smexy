@@ -8,7 +8,7 @@ const { ObjectId } = require('mongodb');
 
 
 
-let addToWishlist =  async (req, res) => {
+let addToWishlist =  async (req, res,next) => {
     try {
         if(req.session.email){
             const productId = req.params.productId;
@@ -53,13 +53,14 @@ let addToWishlist =  async (req, res) => {
     
     } catch (err) {
       console.log(err);
-      res.status(500).json({ message: 'Internal Server Error' });
+      res.status(500);
+      next();
     }
   };
 
 
-  let getWishlist= async (req,res)=>{
-
+  let getWishlist= async (req,res,next)=>{
+    try {
     let userId = req.session.email._id;
     let user = (userId) ? true : false;
     const category = await Category.find();
@@ -79,7 +80,11 @@ let addToWishlist =  async (req, res) => {
         category,
         wishlist:wishData,
     }) 
-
+  } catch(error){
+    console.error('Error in getWishlist:', error);
+    res.status(500);
+    next();
+  }
 
   }
 
@@ -102,7 +107,8 @@ let addToWishlist =  async (req, res) => {
          return res.status(200).json({ message: 'Product removed from the wishlist successfully' });
     } catch (e) {
         console.error(e);
-        res.status(500).json({ message: 'Internal Server Error' });
+        res.status(500);
+        next();
     }
 };
 

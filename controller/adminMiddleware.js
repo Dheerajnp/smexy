@@ -273,7 +273,7 @@ const adminSideUsersList = async(req,res)=>{
     .limit(limit);
     const totalPages = Math.ceil(total/limit);
   
-    res.render('usersList',{ users ,currentPage:page,totalPages,pagetitle:"Users"});
+    res.render('userslist',{ users ,currentPage:page,totalPages,pagetitle:"Users"});
   
     }catch(err){
       console.error("Error fetching users:", err);
