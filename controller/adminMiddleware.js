@@ -1,6 +1,6 @@
 const session = require('express-session');
 const Userdb = require('./database');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const  categoryDb  = require('../models/categoryModel')
 const {Coupon} = require('../models/couponModel')
 const Product = require('../models/productModel');
