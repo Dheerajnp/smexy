@@ -71,9 +71,10 @@ const categoryManagementEdit = async (req, res) => {
         // Update name and description
         category.name = editName;
         category.description = editDescription;
-
+        console.log("ghgdhhahahatha")
         // Update image if a new one is uploaded
         if (req.file) {
+            console.log("ghsghsghsgh")
             // Replace backslashes with forward slashes and remove 'public/' from the path
             const newImage = req.file.path.replace(/\\/g, '/').replace('public/', '');
             category.image = newImage;

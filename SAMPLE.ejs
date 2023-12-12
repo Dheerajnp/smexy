@@ -1,0 +1,317 @@
+'admin-partials/header.ejs') %>
+
+<div class="screen-overlay"></div>
+
+
+<main class="main-wrap">
+    <header class="main-header navbar">
+        <div class="col-search">
+            <form>
+                <datalist id="search_terms">
+                    <option value="Products">
+                    <option value="New orders">
+                    <option value="Apple iphone">
+                    <option value="Ahmed Hassan">
+                </datalist>
+            </form>
+        </div>
+        <div class="col-nav">
+            <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
+                    class="material-icons md-apps"></i> </button>
+            <ul class="nav">
+            
+                <li class="nav-item">
+                    <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
+                </li>
+                <li class="dropdown nav-item">
+                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage"
+                        aria-expanded="false"><i class="material-icons md-public"></i></a>
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
+                        <a class="dropdown-item text-brand" href="#"><img src="/assets/imgs/theme/flag-us.png"
+                                alt="English">English</a>
+                        <a class="dropdown-item" href="#"><img src="/assets/imgs/theme/flag-fr.png"
+                                alt="Français">Français</a>
+                        <a class="dropdown-item" href="#"><img src="/assets/imgs/theme/flag-jp.png"
+                                alt="Français">日本語</a>
+                        <a class="dropdown-item" href="#"><img src="/assets/imgs/theme/flag-cn.png"
+                                alt="Français">中国人</a>
+                    </div>
+                </li>
+                <li class="dropdown nav-item">
+                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount"
+                        aria-expanded="false"><i class="fa-solid fa-user-tie"></i> admin
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                        <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit
+                            Profile</a>
+                        <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
+                        <a class="dropdown-item" href="#"><i
+                                class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                        <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                        <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" href="/admin/logout"><i
+                                class="material-icons md-exit_to_app"></i>Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </header>
+    <section class="content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Dashboard </h2>
+                <p>Whole data about your business here</p>
+            </div>
+            <div>
+                <a href="/admin/generate-invoice-daily" class="btn btn-primary" download>
+                    <i class="text-muted material-icons md-post_add"></i>Daily Report
+                  </a>
+                  <a href="/admin/generate-invoice" class="btn btn-primary" download>
+                    <i class="text-muted material-icons md-post_add"></i>Create Report
+                  </a>     
+            </div> 
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card card-body mb-4">
+                    <article class="icontext">
+                        <span class="icon icon-sm rounded-circle bg-primary-light"><i
+                                class="text-primary material-icons md-monetization_on"></i></span>
+                        <div class="text">
+                            <h6 class="mb-1 card-title">Revenue</h6>
+                            <span><%= totalRevenue.toFixed(2) %></span>
+                            <span class="text-sm">
+                                Shipping fees are not included
+                            </span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card card-body mb-4">
+                    <article class="icontext">
+                        <span class="icon icon-sm rounded-circle bg-warning-light"><i
+                                class="text-warning material-icons md-qr_code"></i></span>
+                        <div class="text">
+                            <h6 class="mb-1 card-title">Products</h6> <span><%= productCount %></span>
+                            <span class="text-sm">
+                                In <%= categoriesCount %> Categories
+                            </span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card card-body mb-4">
+                    <article class="icontext">
+                        <span class="icon icon-sm rounded-circle bg-info-light"><i
+                                class="text-info material-icons md-shopping_basket"></i></span>
+                        <div class="text">
+                            <h6 class="mb-1 card-title">Monthly Earning</h6> <span><%= monthlyEarnings.toFixed(2) %></span>
+                            <span class="text-sm">
+                                Based in your local time.
+                            </span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card card-body mb-4">
+                    <article class="icontext">
+                        <span class="icon icon-sm rounded-circle bg-success-light"><i
+                                class="text-success material-icons md-local_shipping"></i></span>
+                        <div class="text">
+                            <h6 class="mb-1 card-title">Total orders</h6> <span><%= orderCount %></span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card card-body mb-4">
+                    <article class="icontext">
+                        <span class="icon icon-sm rounded-circle bg-success-light"><i
+                                class="text-success material-icons md-local_shipping"></i></span>
+                        <div class="text">
+                            <h6 class="mb-1 card-title">Delivered</h6> <span><%= deliveredOrderCount %></span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card card-body mb-4">
+                    <article class="icontext">
+                        <span class="icon icon-sm rounded-circle bg-success-light"><i
+                                class="text-success material-icons md-local_shipping"></i></span>
+                        <div class="text">
+                            <h6 class="mb-1 card-title">Weekly orders</h6> <span><%= weeklyOrderCount %></span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+             
+        </div>
+        <div class="row">
+            <div class="col-xl-8 col-lg-12">
+                <div class="card mb-4">
+                    <article class="card-body">
+                        <h5 class="card-title">Sale statistics</h5>
+                        <canvas id="combinedOrderChart" width="50" height="30"></canvas>
+                    </article>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-12">
+                <div class="card mb-4">
+                    <article class="card-body">
+                        <h5 class="card-title">Revenue Base on Area</h5>
+                       
+                            <div class="card card-body mb-4">
+                                <article class="icontext">
+                                    <span class="icon icon-sm rounded-circle bg-primary-light"><i
+                                            class="text-primary material-icons md-monetization_on"></i></span>
+                                    <div class="text">
+                                        <h6 class="mb-1 card-title">Average Revenue</h6>
+                                        <span><%= averageRevenue.toFixed(2) %></span>
+                                        <span class="text-sm">
+                                            Shipping fees are not included
+                                        </span>
+                                    </div>
+                                </article>
+                            </div>
+                        <canvas id="averageRevenue" height="217"></canvas>
+                    </article>
+                </div>
+               
+            </div>
+        </div>
+        <div class="card mb-4">
+            <header class="card-header">
+                <h4 class="card-title">Latest orders</h4>
+                <div class="row align-items-center">
+                </div>
+            </header>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div class="table-responsive">
+                        <table class="table align-middle table-nowrap mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    
+                                    <th class="align-middle" scope="col">SI no</th>
+                                    <th class="align-middle" scope="col"></th>
+                                    <th class="align-middle" scope="col">Order ID</th>
+                                    <th class="align-middle" scope="col">Billing Name</th>
+                                    <th class="align-middle" scope="col">Date</th>
+                                    <th class="align-middle" scope="col">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (orders && orders.length > 0) { %>
+                                    <% orders.forEach((order, index) => { %>
+
+                                <tr> 
+                                    <td>
+                                        <%= index + 1 %>
+                                    </td>
+                                    <td class="text-center">
+                                    </td>
+                                    <td>
+                                        <a href="#" class="fw-bold"># <%= order._id %></a>
+                                     </td>
+                                    <td><%= order.user.username %></td>
+                                    <td>
+                                        <%= order.orderDate.toLocaleDateString() %>
+                                    </td>
+                                    <td>
+                                        INR <%= order.billTotal %>
+                                    </td>
+                                    
+                                </tr>
+                                <% }) } else{ %>
+                                <tr>
+                                    <td colspan="9" class="text-center">No orders Found</td>
+                                </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div> 
+            </div>
+            <div>
+                <a href="/admin/order-management" class="btn btn-xs"> View More</a>
+            </div>
+        </div>
+    
+    </section> 
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var ctx = document.getElementById('combinedOrderChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [ 'Weekly Orders', 'Delivered Orders' , 'Total orders'],
+                datasets: [
+                    {
+                        label: 'Weekly Orders',
+                        data: [ <%= weeklyOrderCount %>, 0 , 0],
+                        backgroundColor: 'rgb(70, 70, 223)',
+                        borderColor: 'rgba(70, 70, 223, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Delivered Orders',
+                        data: [ 0, <%= deliveredOrderCount %> , 0],
+                        backgroundColor: ' rgb(0, 128, 0)',
+                        borderColor: 'rgba(0, 128, 0, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Total orders',
+                        data: [ 0, 0, <%= orderCount %>],
+                        backgroundColor: 'rgb(100, 245, 28)',
+                        borderColor: 'rgb(100, 245, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        var ctx = document.getElementById('averageRevenue').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [ 'Average Revenue'],
+                datasets: [
+                    {
+                        label: 'Average Revenue',
+                        data: [ <%= averageRevenue %>, 0],
+                        backgroundColor: 'rgba(255, 0, 0, 1)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    },
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+    </script>
+    
+    <%- include('admin-partials/footer.ejs') %>

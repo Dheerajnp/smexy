@@ -40,34 +40,18 @@
                                             <figure class="border-radius-10">
                                                 <img src="/<%= product.image  %>" alt="product image">
                                             </figure>
+                                            <% product.images.forEach((element)=>{ %>
                                             <figure class="border-radius-10">
-                                                <img src="/<%= product.images[0]  %>" alt="product image">
+                                                <img src="/<%= element %>" alt="product image">
                                             </figure>
-                                            <figure class="border-radius-10">
-                                                <img src="/Userassets/imgs/shop/product-16-3.jpg" alt="product image">
-                                            </figure>
-                                            <figure class="border-radius-10">
-                                                <img src="/Userassets/imgs/shop/product-16-4.jpg" alt="product image">
-                                            </figure>
-                                            <figure class="border-radius-10">
-                                                <img src="/Userassets/imgs/shop/product-16-5.jpg" alt="product image">
-                                            </figure>
-                                            <figure class="border-radius-10">
-                                                <img src="/Userassets/imgs/shop/product-16-6.jpg" alt="product image">
-                                            </figure>
-                                            <figure class="border-radius-10">
-                                                <img src="/Userassets/imgs/shop/product-16-7.jpg" alt="product image">
-                                            </figure>
+                                            <% }) %>
                                         </div>
                                         <!-- THUMBNAILS -->
                                         <div class="slider-nav-thumbnails pl-15 pr-15">
                                             <div><img src="/<%= product.image  %>" alt="product image"></div>
-                                            <div><img src="/<%= product.images[0]  %>"alt="product image"></div>
-                                            <div><img src="/Userassets/imgs/shop/thumbnail-5.jpg" alt="product image"></div>
-                                            <div><img src="/Userassets/imgs/shop/thumbnail-6.jpg" alt="product image"></div>
-                                            <div><img src="/Userassets/imgs/shop/thumbnail-7.jpg" alt="product image"></div>
-                                            <div><img src="/Userassets/imgs/shop/thumbnail-8.jpg" alt="product image"></div>
-                                            <div><img src="/Userassets/imgs/shop/thumbnail-9.jpg" alt="product image"></div>
+                                            <% product.images.forEach((element)=>{ %>
+                                            <div><img src="/<%= element  %>"alt="product image"></div>
+                                            <% }) %>
                                         </div>
                                     </div>
                                     <!-- End Gallery -->
@@ -117,35 +101,9 @@
                                                 <li><i class="fi-rs-credit-card mr-5"></i> Cash on Delivery available</li>
                                             </ul>
                                         </div>
-                                        <!-- <div class="attr-detail attr-color mb-15">
-                                            <strong class="mr-10">Color</strong>
-                                            <ul class="list-filter color-filter">
-                                                <li><a href="#" data-color="Red"><span class="product-color-red"></span></a></li>
-                                                <li><a href="#" data-color="Yellow"><span class="product-color-yellow"></span></a></li>
-                                                <li class="active"><a href="#" data-color="White"><span class="product-color-white"></span></a></li>
-                                                <li><a href="#" data-color="Orange"><span class="product-color-orange"></span></a></li>
-                                                <li><a href="#" data-color="Cyan"><span class="product-color-cyan"></span></a></li>
-                                                <li><a href="#" data-color="Green"><span class="product-color-green"></span></a></li>
-                                                <li><a href="#" data-color="Purple"><span class="product-color-purple"></span></a></li>
-                                            </ul>
-                                        </div>
-                                        <div class="attr-detail attr-size">
-                                            <strong class="mr-10">Size</strong>
-                                            <ul class="list-filter size-filter font-small">
-                                                <li><a href="#">S</a></li>
-                                                <li class="active"><a href="#">M</a></li>
-                                                <li><a href="#">L</a></li>
-                                                <li><a href="#">XL</a></li>
-                                                <li><a href="#">XXL</a></li>
-                                            </ul>
-                                        </div> -->
+                                   
                                         <div class="bt-1 border-color-1 mt-30 mb-30"></div>
                                         <div class="detail-extralink">
-                                            <!-- <div class="detail-qty border radius">
-                                                <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
-                                                <span class="qty-val">1</span>
-                                                <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
-                                            </div> -->
                                             <div class="product-extra-link2">
                                                 <button type="button" class="button button-add-to-cart" onclick="addtoCart('<%= product._id %>')" <%= product.countInStock <= 0 ? 'disabled' : '' %>
                                                     <%= product.countInStock <= 0 ? 'data-toggle="tooltip" data-placement="bottom" title="Out of Stock"' : '' %>>
@@ -185,6 +143,32 @@
         </section>
     </main>
     <script>
+        // Get the container elements
+const mainSlider = document.querySelector('.product-image-slider');
+const thumbnailSlider = document.querySelector('.slider-nav-thumbnails');
+
+// Function to add images to sliders
+function addImageToSliders(src) {
+    // Add images to the main slider
+    const mainImage = document.createElement('figure');
+    mainImage.classList.add('border-radius-10');
+    mainImage.innerHTML = `<img src="/${src}" alt="product image">`;
+    mainSlider.appendChild(mainImage);
+
+    // Add images to the thumbnail slider
+    const thumbnailImage = document.createElement('div');
+    thumbnailImage.innerHTML = `<img src="/${src}" alt="product image">`;
+    thumbnailSlider.appendChild(thumbnailImage);
+}
+
+// Add the first image (product.image) to the main and thumbnail sliders
+addImageToSliders(product.image);
+
+// Loop through product.images and add them to both sliders
+for (let i = 0; i < product.images.length; i++) {
+    const imageSrc = product.images[i];
+    addImageToSliders(imageSrc);
+}
         function addtoCart(itemId){
             fetch('/home/cart/addToCart/'+itemId,{
                 method:'POST',

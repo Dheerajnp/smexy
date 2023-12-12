@@ -20,15 +20,15 @@
                                     report</a>
                 <!-- </div> -->
                 <!-- <div> -->
-                    <a href="/admin/excel" class="btn btn-md btn-primary"><i class="text-muted material-icons md-post_add"></i>Create Excel</a>
+                    <!-- <a href="/admin/excel" class="btn btn-md btn-primary"><i class="text-muted material-icons md-post_add"></i>Create Excel</a> -->
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                     <div class="card card-body mb-4">
                         <article class="icontext">
                             <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
                             <div class="text">
                                 <h6 class="mb-1 card-title">Revenue</h6>
-                                <span>$13,456.5</span>
+                                <span><%= totalRevenue.toFixed(2) %></span>
                                 <span class="text-sm">
                                     Shipping fees are not included
                                 </span>
@@ -36,20 +36,7 @@
                         </article>
                     </div>
                 </div>
-                <div class="col-lg-3">
-                    <div class="card card-body mb-4">
-                        <article class="icontext">
-                            <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-success material-icons md-local_shipping"></i></span>
-                            <div class="text">
-                                <h6 class="mb-1 card-title">Orders</h6> <span>53.668</span>
-                                <span class="text-sm">
-                                    Excluding orders in transit
-                                </span>
-                            </div>
-                        </article>
-                    </div>
-                </div>
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                     <div class="card card-body mb-4">
                         <article class="icontext">
                             <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-qr_code"></i></span>
@@ -62,15 +49,38 @@
                         </article>
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                     <div class="card card-body mb-4">
                         <article class="icontext">
-                            <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
+                            <span class="icon icon-sm rounded-circle bg-info-light"><i
+                                    class="text-info material-icons md-shopping_basket"></i></span>
                             <div class="text">
-                                <h6 class="mb-1 card-title">Monthly Earning</h6> <span>$6,982</span>
+                                <h6 class="mb-1 card-title">Monthly Earning</h6> <span><%= monthlyEarnings.toFixed(2) %></span>
                                 <span class="text-sm">
                                     Based in your local time.
                                 </span>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card card-body mb-4">
+                        <article class="icontext">
+                            <span class="icon icon-sm rounded-circle bg-success-light"><i
+                                    class="text-success material-icons md-local_shipping"></i></span>
+                            <div class="text">
+                                <h6 class="mb-1 card-title">Weekly orders</h6> <span><%= weeklyOrderCount %></span>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card card-body mb-4">
+                        <article class="icontext">
+                            <span class="icon icon-sm rounded-circle bg-success-light"><i
+                                    class="text-success material-icons md-local_shipping"></i></span>
+                            <div class="text">
+                                <h6 class="mb-1 card-title">Total orders</h6> <span><%= orderCount %></span>
                             </div>
                         </article>
                     </div>
@@ -81,7 +91,7 @@
                     <div class="card mb-4">
                         <article class="card-body">
                             <h5 class="card-title">Sale statistics</h5>
-                            <canvas id="myChart" height="120px"></canvas>
+                            <canvas id="combinedOrderChart" width="50" height="30"></canvas>
                         </article>
                     </div>
                 </div>
@@ -281,4 +291,71 @@
                 </nav>
             </div>
         </section> <!-- content-main end// -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var ctx = document.getElementById('combinedOrderChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [ 'Weekly Orders', 'Delivered Orders' , 'Total orders'],
+                        datasets: [
+                            {
+                                label: 'Weekly Orders',
+                                data: [ `<%= weeklyOrderCount %>`, 0 , 0],
+                                backgroundColor: 'rgb(70, 70, 223)',
+                                borderColor: 'rgba(70, 70, 223, 1)',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Delivered Orders',
+                                data: [ 0, `<%= deliveredOrderCount %>` , 0],
+                                backgroundColor: ' rgb(0, 128, 0)',
+                                borderColor: 'rgba(0, 128, 0, 1)',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Total orders',
+                                data: [ 0, 0, `<%= orderCount %>`],
+                                backgroundColor: 'rgb(100, 245, 28)',
+                                borderColor: 'rgb(100, 245, 1)',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            });
+            
+            document.addEventListener('DOMContentLoaded', function () {
+                var ctx = document.getElementById('averageRevenue').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [ 'Average Revenue'],
+                        datasets: [
+                            {
+                                label: 'Average Revenue',
+                                data: [ `<%= averageRevenue %>`, 0],
+                                backgroundColor: 'rgba(255, 0, 0, 1)',
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                borderWidth: 1
+                            },
+                        ]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            });
+            </script>
 <%- include('partialsadmin/adminfooter') %>

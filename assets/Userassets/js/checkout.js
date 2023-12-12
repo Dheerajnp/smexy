@@ -318,6 +318,7 @@ const billTotal = parseFloat(billTotalText.split(' ')[1]); // Extract the numeri
 console.log('Bill Total:', billTotal);
 // Get the relevant elements
 const walletRadioButton = document.getElementById('Wallet');
+const RazorpayRadio = document.getElementById('Razorpay');
 const walletBalance = walletRadioButton.getAttribute('data-balance');
 const walletBalanceDisplay = document.getElementById('walletBalanceDisplay');
 
@@ -336,27 +337,9 @@ const codeSection = document.getElementById('codeSection');
 const verificationCodeInput = document.getElementById('verificationCode');
 const generatedCodeDisplay = document.getElementById('generatedCode');
 
-// Function to generate a random 4-digit code
-function generateRandomCode() {
-    return Math.floor(1000 + Math.random() * 9000);
-}
-
 // Function to enable or disable the "Proceed to Payment" button
 
 const proceedButton = document.getElementById('proceedButton');
-
-function updateProceedButtonState() {
-    const code = verificationCodeInput.value;
-    const generatedCode = generatedCodeDisplay.innerText;
-
-
-
-    if (code === generatedCode) {
-        proceedButton.removeAttribute('disabled');
-    } else {
-        proceedButton.setAttribute('disabled', true);
-    }
-}
 
 
 // Add this condition to check 'billTotal' and initially disable the button
@@ -364,26 +347,20 @@ if (billTotal === 0) {
     proceedButton.setAttribute('disabled', true);
     Swal.fire("Error", "Please add Some Products", "error");
 }
+cashOnDeliveryRadio.addEventListener('change', handlePaymentOptionChange);
+RazorpayRadio.addEventListener('change', handlePaymentOptionChange);
+walletRadioButton.addEventListener('change', handlePaymentOptionChange);
 
 
-// Event listener for the Cash on Delivery radio button
-cashOnDeliveryRadio.addEventListener('change', function () {
-    if (cashOnDeliveryRadio.checked) {
-        codeSection.style.display = 'block'; // Show the code input field
-        const randomCode = generateRandomCode();
-        generatedCodeDisplay.innerText = randomCode;
-        generatedCodeDisplay.style.display = 'block'; // Show the generated code
-        updateProceedButtonState(); // Initial check
+function handlePaymentOptionChange() {
+    if (cashOnDeliveryRadio.checked || RazorpayRadio.checked || walletRadioButton.checked) {
+        proceedButton.removeAttribute('disabled');
     } else {
-        codeSection.style.display = 'none'; // Hide the code input field
-        generatedCodeDisplay.style.display = 'none'; // Hide the generated code
-        verificationCodeInput.value = ''; // Clear the input
-        updateProceedButtonState(); // Initial check
+        proceedButton.setAttribute('disabled', true);
     }
-});
+}
 
-// Event listener for the verification code input
-verificationCodeInput.addEventListener('input', updateProceedButtonState);
+
 
 
 

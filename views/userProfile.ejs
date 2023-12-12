@@ -424,11 +424,6 @@ font-family: 'Montserrat', sans-serif;
                                                 class="fi-rs-marker mr-10"></i>My Address</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="account-detail-tab" data-bs-toggle="tab"
-                                            href="#account-detail" role="tab" aria-controls="account-detail"
-                                            aria-selected="true"><i class="fi-rs-user mr-10"></i>Account details</a>
-                                    </li>
-                                    <li class="nav-item">
                                         <a class="nav-link" href="/logout"><i
                                                 class="fi-rs-sign-out mr-10"></i>Logout</a>
                                     </li>
@@ -649,19 +644,6 @@ font-family: 'Montserrat', sans-serif;
                                                 </div>
                                             </div>
                                             <div class="content">
-                                                <div class="card">
-                                                    <!-- <div class="upper-row">
-                                                        <div class="card-item">
-                                                            <span>Active Balance</span>
-                                                            <span>1&nbsp;804 <span class="dollar">&#8377;</span></span>
-                                                        </div>
-                                                    </div> -->
-                                                    <div class="add-money-button">
-                                                        <button>Add Money</button>
-                                                    </div>
-                                                </div>
-                                                
-
                                                 <div class="transactions">
                                                     <div class="t-desc">Transaction History</div>
                                                     <% walletTransactions.slice(0, 5).forEach(transaction => { %>
@@ -1012,22 +994,6 @@ font-family: 'Montserrat', sans-serif;
                                     </div>
                                 </div>
 
-
-
-                                <div class="tab-pane fade" id="account-detail" role="tabpanel"
-                                    aria-labelledby="account-detail-tab">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5>Account Details</h5>
-                                        </div>
-                                        <div class="card-body">
-
-                                        </div>
-                                    </div>
-                                </div>
-
-
-
                                 <!-- Edit Profile -->
                                 <div class="tab-pane fade" id="Edit-Profile" role="tabpanel"
                                     aria-labelledby="Edit-Profile-tab">
@@ -1096,19 +1062,6 @@ font-family: 'Montserrat', sans-serif;
                                                     class="form-control" />
                                                 <span id="mobileError" class="error-message text-danger"></span>
                                             </div>
-
-
-
-                                            <!-- Checkbox -->
-                                            <!-- <div class="form-check d-flex justify-content-center mb-4">
-                                              <input class="form-check-input me-2" type="checkbox" value="" id="form6Example8" checked />
-                                              <label class="form-check-label" for="form6Example8"> Create an account? </label>
-                                            </div> -->
-
-                                            <!-- Submit button -->
-                                            <!-- Button to open the first modal -->
-                                            <!-- Button to open the user contact details modal -->
-                                            <!-- Button to open the user contact details modal -->
                                             <button id="openModal" type="submit"
                                                 class="btn btn-primary btn-block mb-4">Save Changes</button>
                                         </form>
@@ -1337,17 +1290,6 @@ font-family: 'Montserrat', sans-serif;
         }
     });
     }
-
-
-
-
-
-    //Edit Profile Details
-    // Open the first modal when the button is clicked
-    // Open the user contact details modal when the button is clicked
-    // const openModalButton = document.getElementById('openModal');
-    // const userContactModal = new bootstrap.Modal(document.getElementById('userContactModal'));
-    // const otpVerificationModal = new bootstrap.Modal(document.getElementById('otpVerificationModal'));
 
 
     const form = document.querySelector('#editprofile');

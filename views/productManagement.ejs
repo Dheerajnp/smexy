@@ -85,18 +85,6 @@
                     </div>
                     <div class="col-md-6 mt-1">
                         <h5><%= item.name %></h5>
-                        <div class="d-flex flex-row">
-                            <div class="ratings mr-2 me-1">
-                                <% for (let i = 1; i <= 5; i++) { %>
-                                    <% if(i <= item.rating) { %>
-                                        <i class="fa fa-star" style="color: yellow;"></i>
-                                    <% } else { %>
-                                        <i class="fa fa-star" style="color: black; border-color: black;"></i>
-                                    <% } %>
-                                <% } %>
-                            </div>
-                            <span><%= item.rating %></span>
-                        </div>
                         <div class="mt-1 mb-1 spec-1">
                             <span><%= item.brand %></span>
                             <span class="dot"></span>
@@ -164,8 +152,7 @@
                                                         name="image" accept="image/*" onchange="initCropperEdit('editMainImage_<%= item._id %>')">
                                                         <img src="" id="showeditMainImage_<%= item._id %>"
                                                         style="width: auto; height: 300px; margin-top: 10px; display: block;" alt="">
-                                                    <button class="btn btn-warning p-2 px-5" id="updateeditMainImage_<%= item._id %>"
-                                                        onclick="uploadCroppedImageEdit('editMainImage_<%= item._id %>')" type="button" style="display: none;">Update</button>                   
+                                                
                                                     <img id="mainImagePreview_<%= item._id %>" src="/<%= item.image %>"
                                                         style="max-width: 150px; height: auto;">
                                                 </div>
@@ -280,11 +267,11 @@
                                 <!-- Additional images (upload multiple files) -->
                                 <div class="form-group mb-3">
                                   <label for="additionalImages">Additional Images (Upload multiple files)</label>
-                                  <input type="file" class="form-control-file" id="images" name="images" accept="image/*" onchange="initCropper('images')" multiple>
+                                  <input type="file" class="form-control-file" id="images" name="images" accept="image/*" multiple>
                                   <img src="" id="showimages"
                                   style="width: auto; height: 300px; margin-top: 10px; display: block;" alt="">
-                                  <button class="btn btn-warning p-2 px-5" id="updateimages"
-                                  onclick="uploadCroppedImage('images')" type="button" style="display: none;">Update</button>
+                                  <!-- <button class="btn btn-warning p-2 px-5" id="updateimages"
+                                  onclick="uploadCroppedImage('images')" type="button" style="display: none;">Update</button> -->
 
                                 </div>
                                 <div class="form-group mb-3">

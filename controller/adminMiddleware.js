@@ -79,8 +79,61 @@ let dashboard = async (req, res) => {
   console.log("D:",daily,"W:",weekly,"M:",monthly,"Y:",yearly);
   let allProductsCount = await Product.countDocuments();
   let allcategoriesCount = await categoryDb.countDocuments();
+  const allProducts = await Product.find();
+    const allCategories = await categoryDb.find();
+    const allOrders = await orderModel.find();
+    // const orders = await Order.find()
+    // .sort({ createdAt: -1 })
+    // .populate('user', 'username')
+    // .limit(4)
+    // .exec();
+    // const userDetail = await Userdb.findOne({ _id: orders[0].user });
 
-  res.render("dashboard",{daily,weekly,monthly,yearly,orders,allProductsCount,allcategoriesCount});
+    const productCount = allProducts.length;
+    const categoriesCount = allCategories.length;
+    const orderCount = allOrders.length;
+    const currentDate = new Date();
+    const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+    const startOfWeek = new Date(currentDate);
+    startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
+    const endOfWeek = new Date(currentDate);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+    const monthlyOrders = await orderModel.find({
+      orderDate: { $gte: startOfMonth, $lte: endOfMonth },
+    });
+
+    const totalRevenue = allOrders.reduce((total, order) => {
+      return total + order.billTotal;
+    }, 0);
+
+    const averageRevenue = orderCount > 0 ? totalRevenue / orderCount : 0;
+
+    const deliveredOrders = monthlyOrders.filter(order => order.status === 'Delivered');
+    const pendingOrders = monthlyOrders.filter(order => (order.status !== 'Delivered'&& order.status !== 'Canceled'));
+
+    const monthlyEarnings = deliveredOrders.reduce((totalEarnings, order) => {
+      return totalEarnings + order.billTotal;
+    }, 0);
+
+    const weeklyOrders = await orderModel.find({
+      orderDate: { $gte: startOfWeek, $lte: endOfWeek },
+    });
+
+    const weeklyOrderCount = weeklyOrders.length;
+    const deliveredOrderCount = deliveredOrders.length;
+    const pendingOrderCount = pendingOrders.length;
+  res.render("dashboard",{daily,weekly,monthly,yearly,orders,allProductsCount,allcategoriesCount,productCount,
+    categoriesCount,
+    orderCount,
+    weeklyOrderCount,
+    deliveredOrderCount,
+    pendingOrderCount,
+    totalRevenue,
+    averageRevenue,
+    monthlyEarnings,
+    orders,});
 
  }catch(error){
   res.redirect('/')

@@ -184,20 +184,20 @@
                             <% const endPage = Math.min(currentPage + numPagesToShow, totalPages); %>
                     
                             <!-- Previous Page -->
-                            <li class="page-item <%= currentPage <= 1 ? 'disabled' : '' %> " >
+                            <li class="page-item <%= currentPage <= 1 ? 'disabled' : '' %> " style="list-style-type: none;" >
                                 <a class="page-link" href="#" data-page="<%= currentPage - 1 %>" aria-label="Previous">
                                     <span aria-hidden="true">««</span>
                                 </a>
                             </li>
                     
                             <% for (let i = startPage; i <= endPage; i++) { %>
-                                <li class="page-item <%= i === currentPage ? 'active' : '' %>" > <a class="page-link" href="#" data-page="<%= i %>"><%= i %></a>
+                                <li  style="list-style-type: none;" class="page-item <%= i == currentPage ? 'active' : '' %>" > <a class="page-link" href="#" data-page="<%= i %>"><%= i %></a>
                                    
                                 </li>
                             <% } %>
                     
                             <!-- Next Page -->
-                            <li class="page-item <%= currentPage >= totalPages ? 'disabled' : '' %>" >
+                            <li class="page-item <%= currentPage >= totalPages ? 'disabled' : '' %>" style="list-style-type: none;" >
                                 <a class="page-link" href="#" data-page="<%= currentPage + 1 %>" aria-label="Next">
                                     <span aria-hidden="true">»»</span>
                                 </a>
