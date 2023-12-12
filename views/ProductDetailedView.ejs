@@ -143,32 +143,7 @@
         </section>
     </main>
     <script>
-        // Get the container elements
-const mainSlider = document.querySelector('.product-image-slider');
-const thumbnailSlider = document.querySelector('.slider-nav-thumbnails');
 
-// Function to add images to sliders
-function addImageToSliders(src) {
-    // Add images to the main slider
-    const mainImage = document.createElement('figure');
-    mainImage.classList.add('border-radius-10');
-    mainImage.innerHTML = `<img src="/${src}" alt="product image">`;
-    mainSlider.appendChild(mainImage);
-
-    // Add images to the thumbnail slider
-    const thumbnailImage = document.createElement('div');
-    thumbnailImage.innerHTML = `<img src="/${src}" alt="product image">`;
-    thumbnailSlider.appendChild(thumbnailImage);
-}
-
-// Add the first image (product.image) to the main and thumbnail sliders
-addImageToSliders(product.image);
-
-// Loop through product.images and add them to both sliders
-for (let i = 0; i < product.images.length; i++) {
-    const imageSrc = product.images[i];
-    addImageToSliders(imageSrc);
-}
         function addtoCart(itemId){
             fetch('/home/cart/addToCart/'+itemId,{
                 method:'POST',
