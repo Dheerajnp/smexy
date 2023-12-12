@@ -154,9 +154,12 @@ function cancelOrder(productId) {
       icon : 'success',
       text: ' Product is removed from wishlist'
     })
-    window.location.reload();
+    .then(()=>{
+        window.location.reload();
+    })
+
   }else{
-    console.error('Error canceling order:', response.statusText);
+    console.error('Error removing from wishlist:', response.statusText);
   }
   })
   .catch((error)=>{
