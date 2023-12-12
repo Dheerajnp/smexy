@@ -69,8 +69,8 @@ let dashboard = async (req, res) => {
  try{
   req.session.admn = true;
 
-  let orders = await orderModel.find().sort({ createdAt: -1 }).limit(10).populate('user', 'fullname')
-
+  let orders = await orderModel.find().sort({ createdAt: -1 }).limit(6).populate('user', 'fullname')
+  const ordersData = await orderModel.find().sort({ createdAt: -1 }).limit(6).populate('user', 'name').exec();
   let daily = await salesReport(1)
   let weekly = await salesReport(7);
   let monthly = await salesReport(30);
@@ -133,7 +133,8 @@ let dashboard = async (req, res) => {
     totalRevenue,
     averageRevenue,
     monthlyEarnings,
-    orders,});
+    orders,
+    ordersData});
 
  }catch(error){
   res.redirect('/')

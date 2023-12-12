@@ -5,13 +5,48 @@ const product = require('../models/productModel')
 const multer = require('multer');
 
 const categoryManagementGet = async (req, res) => {
+    const Items_Page = 6
     try {
-        const categories = await Category.find();
-
+       
+         let search = '';
+         let page = 1;
+         if(req.query.search){
+            search = req.query.search;
+         }
+         if(req.query.page && parseInt(req.query.page)){
+            page = parseInt(req.query.page);
+         }
+         const sanitizedSearch = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+         const totalItems = await Category.countDocuments({
+           $or : [
+            {name:{ $regex: new RegExp(sanitizedSearch, 'i')}},
+           ]
+         })
+         const totalPages = Math.ceil(totalItems/Items_Page);
+         const skip = (page - 1) * Items_Page;
+         const categories = await Category.find({
+        $or : [
+          {name : { $regex : new RegExp(sanitizedSearch , 'i')}}
+        ]
+       })
+       .skip(skip)
+       .limit(Items_Page)
+        if(req.session.categoryErr){
+            var categoryErr= req.session.categoryErr
+            req.session.categoryErr = null
+           }else{
+             categoryErr = ''
+           }
+     
 
         res.render('category', {
             pagetitle: 'Category',
-            categories: categories,
+            categories: categories, 
+            totalPages,
+            search,
+            currentPage : page,
+            categoryErr
+
         });
     } catch (error) {
         console.error('Error fetching categories:', error);
@@ -33,6 +68,13 @@ const categoryManagementCreate = async (req, res) => {
 
             image = req.file.path.replace(/\\/g, '/').replace('public/', '');
         }
+        const existingCategory = await Category.findOne({
+            name: { $regex: new RegExp("^" + name + "$", "i") }
+        });
+          if (existingCategory) {
+            req.session.categoryErr='Category Exists'
+            return res.redirect('/admin/category-management');
+          }
 
         const category = new Category({
             name,

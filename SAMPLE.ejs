@@ -1,317 +1,247 @@
-'admin-partials/header.ejs') %>
-
-<div class="screen-overlay"></div>
-
+<%- include('admin-partials/header.ejs') %>
 
 <main class="main-wrap">
-    <header class="main-header navbar">
-        <div class="col-search">
-            <form>
-                <datalist id="search_terms">
-                    <option value="Products">
-                    <option value="New orders">
-                    <option value="Apple iphone">
-                    <option value="Ahmed Hassan">
-                </datalist>
-            </form>
-        </div>
-        <div class="col-nav">
-            <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
-                    class="material-icons md-apps"></i> </button>
-            <ul class="nav">
-            
-                <li class="nav-item">
-                    <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
-                </li>
-                <li class="dropdown nav-item">
-                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage"
-                        aria-expanded="false"><i class="material-icons md-public"></i></a>
-                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
-                        <a class="dropdown-item text-brand" href="#"><img src="/assets/imgs/theme/flag-us.png"
-                                alt="English">English</a>
-                        <a class="dropdown-item" href="#"><img src="/assets/imgs/theme/flag-fr.png"
-                                alt="Français">Français</a>
-                        <a class="dropdown-item" href="#"><img src="/assets/imgs/theme/flag-jp.png"
-                                alt="Français">日本語</a>
-                        <a class="dropdown-item" href="#"><img src="/assets/imgs/theme/flag-cn.png"
-                                alt="Français">中国人</a>
-                    </div>
-                </li>
-                <li class="dropdown nav-item">
-                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount"
-                        aria-expanded="false"><i class="fa-solid fa-user-tie"></i> admin
-                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                        <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit
-                            Profile</a>
-                        <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
-                        <a class="dropdown-item" href="#"><i
-                                class="material-icons md-account_balance_wallet"></i>Wallet</a>
-                        <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
-                        <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item text-danger" href="/admin/logout"><i
-                                class="material-icons md-exit_to_app"></i>Logout</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </header>
-    <section class="content-main">
-        <div class="content-header">
-            <div>
-                <h2 class="content-title card-title">Dashboard </h2>
-                <p>Whole data about your business here</p>
+   <header class="main-header navbar">
+      <div class="col-search">
+         <form class="searchform">
+            <div class="input-group">
+               <input list="search_terms" type="text" class="form-control border" placeholder="Search categories"
+                  name="search">
+               <input class="btn btn-primary bg" type="submit" value="search"></input>
             </div>
-            <div>
-                <a href="/admin/generate-invoice-daily" class="btn btn-primary" download>
-                    <i class="text-muted material-icons md-post_add"></i>Daily Report
-                  </a>
-                  <a href="/admin/generate-invoice" class="btn btn-primary" download>
-                    <i class="text-muted material-icons md-post_add"></i>Create Report
-                  </a>     
-            </div> 
-        </div>
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="card card-body mb-4">
-                    <article class="icontext">
-                        <span class="icon icon-sm rounded-circle bg-primary-light"><i
-                                class="text-primary material-icons md-monetization_on"></i></span>
-                        <div class="text">
-                            <h6 class="mb-1 card-title">Revenue</h6>
-                            <span><%= totalRevenue.toFixed(2) %></span>
-                            <span class="text-sm">
-                                Shipping fees are not included
-                            </span>
-                        </div>
-                    </article>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="card card-body mb-4">
-                    <article class="icontext">
-                        <span class="icon icon-sm rounded-circle bg-warning-light"><i
-                                class="text-warning material-icons md-qr_code"></i></span>
-                        <div class="text">
-                            <h6 class="mb-1 card-title">Products</h6> <span><%= productCount %></span>
-                            <span class="text-sm">
-                                In <%= categoriesCount %> Categories
-                            </span>
-                        </div>
-                    </article>
-                </div>
-            </div>
-            
-            <div class="col-lg-4">
-                <div class="card card-body mb-4">
-                    <article class="icontext">
-                        <span class="icon icon-sm rounded-circle bg-info-light"><i
-                                class="text-info material-icons md-shopping_basket"></i></span>
-                        <div class="text">
-                            <h6 class="mb-1 card-title">Monthly Earning</h6> <span><%= monthlyEarnings.toFixed(2) %></span>
-                            <span class="text-sm">
-                                Based in your local time.
-                            </span>
-                        </div>
-                    </article>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="card card-body mb-4">
-                    <article class="icontext">
-                        <span class="icon icon-sm rounded-circle bg-success-light"><i
-                                class="text-success material-icons md-local_shipping"></i></span>
-                        <div class="text">
-                            <h6 class="mb-1 card-title">Total orders</h6> <span><%= orderCount %></span>
-                        </div>
-                    </article>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="card card-body mb-4">
-                    <article class="icontext">
-                        <span class="icon icon-sm rounded-circle bg-success-light"><i
-                                class="text-success material-icons md-local_shipping"></i></span>
-                        <div class="text">
-                            <h6 class="mb-1 card-title">Delivered</h6> <span><%= deliveredOrderCount %></span>
-                        </div>
-                    </article>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="card card-body mb-4">
-                    <article class="icontext">
-                        <span class="icon icon-sm rounded-circle bg-success-light"><i
-                                class="text-success material-icons md-local_shipping"></i></span>
-                        <div class="text">
-                            <h6 class="mb-1 card-title">Weekly orders</h6> <span><%= weeklyOrderCount %></span>
-                        </div>
-                    </article>
-                </div>
-            </div>
-             
-        </div>
-        <div class="row">
-            <div class="col-xl-8 col-lg-12">
-                <div class="card mb-4">
-                    <article class="card-body">
-                        <h5 class="card-title">Sale statistics</h5>
-                        <canvas id="combinedOrderChart" width="50" height="30"></canvas>
-                    </article>
-                </div>
-            </div>
-            <div class="col-xl-4 col-lg-12">
-                <div class="card mb-4">
-                    <article class="card-body">
-                        <h5 class="card-title">Revenue Base on Area</h5>
-                       
-                            <div class="card card-body mb-4">
-                                <article class="icontext">
-                                    <span class="icon icon-sm rounded-circle bg-primary-light"><i
-                                            class="text-primary material-icons md-monetization_on"></i></span>
-                                    <div class="text">
-                                        <h6 class="mb-1 card-title">Average Revenue</h6>
-                                        <span><%= averageRevenue.toFixed(2) %></span>
-                                        <span class="text-sm">
-                                            Shipping fees are not included
-                                        </span>
-                                    </div>
-                                </article>
-                            </div>
-                        <canvas id="averageRevenue" height="217"></canvas>
-                    </article>
-                </div>
-               
-            </div>
-        </div>
-        <div class="card mb-4">
-            <header class="card-header">
-                <h4 class="card-title">Latest orders</h4>
-                <div class="row align-items-center">
-                </div>
-            </header>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <div class="table-responsive">
-                        <table class="table align-middle table-nowrap mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    
-                                    <th class="align-middle" scope="col">SI no</th>
-                                    <th class="align-middle" scope="col"></th>
-                                    <th class="align-middle" scope="col">Order ID</th>
-                                    <th class="align-middle" scope="col">Billing Name</th>
-                                    <th class="align-middle" scope="col">Date</th>
-                                    <th class="align-middle" scope="col">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% if (orders && orders.length > 0) { %>
-                                    <% orders.forEach((order, index) => { %>
+         </form>
+      </div>
+      <div class="col-nav">
+         <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
+               class="material-icons md-apps"></i> </button>
+         <ul class="nav">
+            <li class="nav-item">
+               <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+            </li>
+            <li class="nav-item">
+               <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
+            </li>
 
-                                <tr> 
-                                    <td>
-                                        <%= index + 1 %>
-                                    </td>
-                                    <td class="text-center">
-                                    </td>
-                                    <td>
-                                        <a href="#" class="fw-bold"># <%= order._id %></a>
-                                     </td>
-                                    <td><%= order.user.username %></td>
-                                    <td>
-                                        <%= order.orderDate.toLocaleDateString() %>
-                                    </td>
-                                    <td>
-                                        INR <%= order.billTotal %>
-                                    </td>
-                                    
-                                </tr>
-                                <% }) } else{ %>
-                                <tr>
-                                    <td colspan="9" class="text-center">No orders Found</td>
-                                </tr>
-                                <% } %>
-                            </tbody>
-                        </table>
-                    </div>
-                </div> 
+            <li class="dropdown nav-item">
+               <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false">
+                  <i class="fa-solid fa-user-tie"></i>
+                  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                     <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit
+                        Profile</a>
+                     <div class="dropdown-divider"></div>
+                     <a class="dropdown-item text-danger" href="/admin"><i
+                           class="material-icons md-exit_to_app"></i>Logout</a>
+                  </div>
+            </li>
+         </ul>
+      </div>
+   </header>
+   <section class="content-main">
+      <div class="content-header">
+         <div>
+            <h2 class="content-title card-title">Category Management</h2>
+         </div>
+         <div>
+            <a href="#" class="btn btn-primary btn-sm rounded" data-bs-toggle="modal"
+               data-bs-target="#addProductModal">Add new category</a>
+            <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel"
+               aria-hidden="true">
+               <div class="modal-dialog">
+                  <div class="modal-content">
+                     <div class="modal-header">
+                        <h5 class="modal-title" id="addProductModalLabel">Add New Category</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                     </div>
+                     <div class="modal-body">
+                        <!-- Product details form -->
+                        <form action="/admin/category-management/newCategory" method="post"
+                           enctype="multipart/form-data">
+                           <div class="mb-3">
+                              <label for="name" class="form-label">Category Name</label>
+                              <input type="text" id="name" name="name" class="form-control" required>
+                           </div>
+                           <div class="mb-3">
+                              <label for="description" class="form-label">Category Description</label>
+                              <input type="text" class="form-control" id="description" name="description" required>
+                           </div>
+                           <div class="mb-3">
+                              <label for="image" class="form-label">Category Image</label>
+                              <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
+                           </div>
+                           <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary">Add Category</button>
+                           </div>
+                        </form>
+                     </div>
+
+                  </div>
+               </div>
             </div>
-            <div>
-                <a href="/admin/order-management" class="btn btn-xs"> View More</a>
-            </div>
-        </div>
-    
-    </section> 
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var ctx = document.getElementById('combinedOrderChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: [ 'Weekly Orders', 'Delivered Orders' , 'Total orders'],
-                datasets: [
-                    {
-                        label: 'Weekly Orders',
-                        data: [ <%= weeklyOrderCount %>, 0 , 0],
-                        backgroundColor: 'rgb(70, 70, 223)',
-                        borderColor: 'rgba(70, 70, 223, 1)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Delivered Orders',
-                        data: [ 0, <%= deliveredOrderCount %> , 0],
-                        backgroundColor: ' rgb(0, 128, 0)',
-                        borderColor: 'rgba(0, 128, 0, 1)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Total orders',
-                        data: [ 0, 0, <%= orderCount %>],
-                        backgroundColor: 'rgb(100, 245, 28)',
-                        borderColor: 'rgb(100, 245, 1)',
-                        borderWidth: 1
-                    }
-                ]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
+         </div>
+      </div>
+
+      <div id="errorContainer" style="text-align: center; margin-top: 10px; padding: 10px;">
+         <% if (categoryErr) { %>
+         <p style="color: rgb(255, 14, 14);"><%= categoryErr %></p>
+         <script>
+            setTimeout(function () {
+               var errorContainer = document.getElementById('errorContainer');
+               if (errorContainer) {
+                  errorContainer.style.display = 'none';
+               }
+            }, 5000);
+         </script>
+         <% } else { %>
+         <p></p>
+         <% } %>
+      </div>
+
+
+      <div class="card-body">
+         <div class="table-responsive border rounded">
+            <table class="table text-center">
+               <thead class="border rounded">
+                  <tr class="text-center">
+                     <th scope="col">Sl No</th>
+                     <th scope="col">Image</th>
+                     <th scope="col">Category Name</th>
+                     <th colspan="1">Description</th>
+                     <th scope="col">Action</th>
+                  </tr>
+               </thead>
+               <tbody class="border rounded">
+                  <% categories?.forEach((category, index) => { %>
+                  <tr>
+                     <td class="align-middle"><%= index + 1 %></td>
+                     <td class="align-middle">
+                        <% if (category.image) { %>
+                        <img src="/<%= category.image %>" class="img-thumbnail" alt="<%= category.name %>"
+                           style="width: 65px; height: 80px">
+                        <% } %>
+                     </td>
+                     <td class="align-middle"><%= category.name %></td>
+                     <td class="align-middle" style="max-width: 300px; min-width: 150px;"><%= category.description %>
+                     </td>
+                     <td class="align-middle">
+                        <button type="button" class="btn btn-sm font-sm rounded btn-brand" data-bs-toggle="modal"
+                           data-bs-target="#editModal<%= category._id %>" data-category-id="<%= category._id %>">
+                           <i class="material-icons md-edit"></i> Edit
+                        </button>
+                        <button type="button"
+                           class="btn btn-sm font-sm rounded <%= category.isFeatured ? 'btn-danger' : 'btn-success' %>"
+                           onclick="publishCategory('<%= category._id %>')">
+                           <%= category.isFeatured ? 'Unpublish' : 'Publish' %>
+                        </button>
+                     </td>
+                  </tr>
+
+                  <!-- Edit Modal -->
+                  <div class="modal fade" id="editModal<%= category._id %>" tabindex="-1"
+                     aria-labelledby="editModalLabel" aria-hidden="true">
+                     <div class="modal-dialog">
+                        <div class="modal-content">
+                           <div class="modal-header">
+                              <h5 class="modal-title" id="editModalLabel">Edit Category</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                 aria-label="Close"></button>
+                           </div>
+                           <div class="modal-body">
+                              <!-- Your edit form goes here -->
+                              <form action="category-management/edit-category/<%= category._id %>"
+                                 enctype="multipart/form-data" method="post">
+                                 <!-- Image Upload Section -->
+
+                                 <div class="mb-3">
+                                    <label for="editName" class="form-label">Category Name</label>
+                                    <input type="text" class="form-control" id="editName" name="editName"
+                                       value="<%= category.name %>">
+                                 </div>
+                                 <div class="mb-3">
+                                    <label for="editDescription" class="form-label">Description</label>
+                                    <textarea class="form-control" id="editDescription" rows="2" name="editDescription"> <%= category.description %>
+                     
+                  </textarea>
+                                 </div>
+                                 <div class="mb-3">
+                                    <label for="editImage" class="form-label">Category Image</label>
+                                    <div class="mb-3 ">
+                                       <img class="m-1" src="/<%= category.image %>" alt="<%= category.name %>"
+                                          style="width: 65px; height: 80px">
+                                    </div>
+                                    <input type="file" class="form-control" name="editImage" id="editImage"
+                                       accept="image/*">
+
+                                 </div>
+
+                                 <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                       data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                 </div>
+                              </form>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+
+
+                  </td>
+                  <!-- End Edit Modal -->
+                  <% }) %>
+               </tbody>
+            </table>
+         </div>
+      </div>
+
+      <div class="pagination-area mt-30 mb-50">
+         <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-start">
+               <% for( let i = 1; i <= totalPages; i++ ) { %>
+               <% if (i === currentPage) { %>
+               <li class="page-item active"><span class="page-link"><%= i %></span></li>
+               <% } else if (i === currentPage-1 || i === currentPage + 1 || i===1 || i === totalPages) { %>
+               <li class="page-item"><a class="page-link" href="?page=<%= i %>&search=<%= search %>"><%= i %></a></li>
+               <% } else if (i === currentPage - 2 ||  i === currentPage + 2 ) { %>
+               <li class="page-item"><span class="page-link dot">...</span></li>
+               <% } %>
+               <% } %>
+            </ul>
+         </nav>
+      </div>
+   </section>
+
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   <script>
+      async function publishCategory(categoryId) {
+         let result = await Swal.fire({
+            title: 'Do you want to save the changes?',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Save',
+            denyButtonText: Don't save,
+         })
+         if (result.isConfirmed) {
+            let response = await fetch('/admin/category-management/isFeatured', {
+               method: 'POST',
+               headers: {
+                  "Content-Type": "application/json",
+               },
+               body: JSON.stringify({
+                  categoryId
+               })
+            })
+            if (response.status === 200) {
+               await Swal.fire('Saved!', 'Category Unpublished', 'success')
+            } else if (response.status === 201) {
+               await Swal.fire('Saved!', 'Category Published', 'success')
             }
-        });
-    });
-    
-    document.addEventListener('DOMContentLoaded', function () {
-        var ctx = document.getElementById('averageRevenue').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: [ 'Average Revenue'],
-                datasets: [
-                    {
-                        label: 'Average Revenue',
-                        data: [ <%= averageRevenue %>, 0],
-                        backgroundColor: 'rgba(255, 0, 0, 1)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1
-                    },
-                ]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    });
-    </script>
-    
-    <%- include('admin-partials/footer.ejs') %>
+
+            window.location.reload();
+         } else if (result.isDenied) {
+            Swal.fire('Changes are not saved', '', 'info')
+         }
+      }
+   </script>
+   
+   <%- include('admin-partials/footer.ejs') %>
