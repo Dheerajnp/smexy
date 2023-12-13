@@ -159,10 +159,6 @@
       const toastHeader = toast.querySelector('.toast-header');
 
       if (data.success) {
-        // toastHeader.innerHTML = 'Success';
-        // toastBody.innerHTML = 'Item added to the cart successfully.';
-        // toast.classList.remove('bg-danger');
-        // toast.classList.add('bg-success');
         Swal.fire('Success', 'Item added to Cart', 'success');
       } else {
         toastHeader.innerHTML = 'Error';

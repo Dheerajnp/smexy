@@ -1324,7 +1324,7 @@ const userOrderGet = async(req,res)=>{
 
     
     const totalorders = await OrderModel.countDocuments({user: req.session.email._id});
-    const orders = await OrderModel.find().sort({orderDate: -1}).skip(skip).limit(limit);
+    const orders = await OrderModel.find({user: req.session.email._id}).sort({orderDate: -1}).skip(skip).limit(limit);
     const totalPages = Math.ceil(totalorders / limit)
     res.render('userOrdersList',{
       category,
