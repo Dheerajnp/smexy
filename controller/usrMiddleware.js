@@ -268,11 +268,6 @@ async function postRegister(req, res, next) {
       isBlocked: false,
       referralcode:generateReferralCode(),
     }
-
-    // Save the new user to the database
-    // await user.save();
-
-
     //put the userdata in session
     req.session.otp = otp;
     req.session.userDetails = user;
@@ -320,7 +315,6 @@ async function postVerifyOtp(req, res, next) {
 
     // Compare the entered OTP with the stored OTP code
     if (otp == otpverify.code) {
-      console.log("scvkbvjkcbjbvf")
       user.isverified = true;
       let response = await Userdb.insertMany([req.session.userDetails])
       let userdata = await Userdb.findOne({email:user.email})

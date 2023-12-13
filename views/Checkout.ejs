@@ -533,7 +533,9 @@
                                                             <% if (coupons && coupons.length > 0) { %>
                                                                 <% coupons.forEach(coupon => { %>
                                                                 <div class="card-body">
+                                                                    <% if(coupon.status=='Active'){ %>
                                                                     <div class="d-flex justify-content-between align-items-center">
+                                
                                                                         <div>
                                                                             <p class="mb-0">
                                                                                 <i class="fi-rs-label mr-2"><b style="color: green;"><%= coupon.couponCode %></b></i>
@@ -544,6 +546,7 @@
                                                                             <p class="mb-0">Maximum Discount: <%= coupon.maxDiscountValue %></p>
                                                                         </div>
                                                                     </div>
+                                                                    <% } %>
                                                                 </div>
 
                                                     <% }) %>
