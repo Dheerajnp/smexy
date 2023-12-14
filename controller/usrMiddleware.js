@@ -370,6 +370,7 @@ async function postVerifyOtp(req, res, next) {
       }
       req.session.userDetails = null;
       req.session.otp = null;
+      console.log( req.session.userDetails,req.session.otp)
       res.redirect('/login')
     } else {
       res.render('otp',{err:"Enter the correct otp"})

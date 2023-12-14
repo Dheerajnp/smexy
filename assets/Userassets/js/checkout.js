@@ -168,11 +168,15 @@ $(document).ready(function () {
                 if (data.success) {
                     Swal.fire({
                         icon: 'success',
-                        title: 'success...',
+                        title: 'Success...',
                         text: 'Address Saved Successfully',
-                    });
-                    $('#addressModal').modal('hide');
-                    window.location.reload()
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                          window.location.reload();
+                        }
+                      });
+                      
+                    
                 } else {
                     Swal.fire({
                         icon: 'warnning',
@@ -209,8 +213,12 @@ function addressRemove(addressType) {
                     icon: 'success',
                     title: 'success...',
                     text: 'Address Deleted',
-                });
-                window.location.reload();
+                }).then((result)=>{
+                    if (result.isConfirmed) {
+                        window.location.reload();
+                      }
+                })
+                
             } else {
                 // Handle the error and display an error message
                 console.error('Error deleting address:', response.statusText);

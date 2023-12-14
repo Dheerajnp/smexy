@@ -533,7 +533,7 @@
                                                             <% if (coupons && coupons.length > 0) { %>
                                                                 <% coupons.forEach(coupon => { %>
                                                                 <div class="card-body">
-                                                                    <% if(coupon.status=='Active'){ %>
+                                                                    <% if(coupon.status=='Active'&& coupon.minPurchase <= billTotal){ %>
                                                                     <div class="d-flex justify-content-between align-items-center">
                                 
                                                                         <div>

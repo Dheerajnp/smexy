@@ -13,20 +13,17 @@
   align-items: center;
   display: flex;
   justify-content: center;
-  background-image: radial-gradient(
-    circle farthest-corner at 10% 20%,
-    rgba(253, 101, 133, 1) 0%,
-    rgba(255, 211, 165, 1) 90%
-  );
+  background: #009579;
 }
 
 .card {
   border-radius: 10px;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.3);
   width: 400px;
-  height: 500px;
+  height: auto;
   background-color: #ffffff;
   padding: 10px 30px;
+  padding-bottom: 50px;
 }
 
 .card_title {
@@ -50,7 +47,7 @@
 }
 
 .form button {
-  background-color: #4796ff;
+  background-color: rgb(0, 102, 83);
   color: #ffffff;
   font-size: 16px;
   outline: none;
